@@ -23,28 +23,19 @@ window.MEMES = [
   { title: "Mikä on Suomen kansalliskala? – Joutsen", aliases: ["Suomen kansalliskala", "Kansalliskala", "Joutsen", "Seksikäs-Suklaa", "Seksikäs Suklaa"], youtube: "https://www.youtube.com/watch?v=Ij2PRA8iGZ4" },
 
   // ---------- Tubettajat ----------
-  { title: "Risumies", youtube: "https://youtu.be/2PT4aRyqeoI?t=30" },
   { title: "Topi", aliases: ["Topi karkaa", "Kissa karkaa", "Markoboy kissa"], youtube: "https://youtu.be/ql7k3aq3lo0?t=4" },
   { title: "Arkkivihollinen on palannut", aliases: ["Arkkivihollinen", "Vitun grilli", "Grilli", "Markoboy grilli"], youtube: "https://youtu.be/tCrn38XM-vE?t=89" },
   { title: "Niilo22 – Vituttaa", aliases: ["Niilo22", "Niilo", "Vituttaa"], youtube: "https://www.youtube.com/watch?v=mKLlYlyZvlA" },
 
+  // ---------- TV ja elokuvat ----------
   // ---------- Kummeli ----------
   // Jokaisella on "Kummeli …"-alias, jotta "kummeli" kirjoittamalla löytyvät kaikki
   { title: "Tonnin seteli", aliases: ["Kummeli – Tonnin seteli", "Se oli tonnin seteli", "Tonni"], youtube: "https://youtu.be/mHvBvkSCx2w?t=24" },
   { title: "Jankon Betoni", aliases: ["Kummeli – Jankon Betoni", "Jankko", "Kalervo Jankko", "Betoni"], youtube: "https://youtu.be/A7_Qko2xrjA?t=37" },
   { title: "Kummeli – Biologian tunti", aliases: ["Biologian tunti", "Speedy ja Saku: Biologian tunti"], youtube: "https://www.youtube.com/watch?v=fuYyPqtSVUw" },
-  { title: "Kummeli – Puukässä", aliases: ["Puukässä", "Speedy ja Saku: Puukässä", "Puukäsityö"], youtube: "https://www.youtube.com/watch?v=kCTURSJmvdY" },
-  { title: "Hei mulla on reikiä päässä", aliases: ["Kummeli – Reikiä päässä", "Reikiä päässä", "Mulla on reikiä päässä"], youtube: "https://www.youtube.com/watch?v=BSOPmUo-BNo" },
-  { title: "Kummeli – Panomies", aliases: ["Panomies"], youtube: "https://www.youtube.com/watch?v=jrqEe6XK3VI" },
-  { title: "Kummeli – Autonmyyjät", aliases: ["Autonmyyjät", "Autokauppa"], youtube: "https://www.youtube.com/watch?v=ZmD_wxBfo74" },
-  { title: "Kummeli – Rapakymppi", aliases: ["Rapakymppi"], youtube: "https://www.youtube.com/watch?v=EVjrpImlLMY" },
-  { title: "Kummeli – Verotarkastaja", aliases: ["Verotarkastaja", "Verottaja"], youtube: "https://www.youtube.com/watch?v=INni5QOKGAc" },
-  { title: "Kummeli – Bemarin laina", aliases: ["Bemarin laina", "Bemari"], youtube: "https://www.youtube.com/watch?v=UZy-z2ocsMo" },
-  { title: "Kummeli – Pääministeri", aliases: ["Pääministeri"], youtube: "https://www.youtube.com/watch?v=TVHUMH9liA4" },
-  { title: "Kummeli – Kreikkalainen tarjoilija", aliases: ["Kreikkalainen tarjoilija", "Tarjoilija"], youtube: "https://www.youtube.com/watch?v=Uo-KGK0Zqtw" },
-  { title: "Kummeli – Ilmoituksella kirvesmies", aliases: ["Ilmoituksella kirvesmies", "Kirvesmies"], youtube: "https://www.youtube.com/watch?v=fbjOV95VBOE" },
-  { title: "Kummeli – En lähde, en ole", aliases: ["En lähde, en ole", "En lähde", "Naapuri"], youtube: "https://www.youtube.com/watch?v=RXLopKnRH58" },
-  { title: "Kummeli Kultakuume – Jumalauta!", aliases: ["Kultakuume", "Jumalauta"], youtube: "https://www.youtube.com/watch?v=y8k4SsBJ938" },
+  { title: "Hei mulla on reikiä päässä", aliases: ["Kummeli – Reikiä päässä", "Reikiä päässä", "Mulla on reikiä päässä"], youtube: "https://youtu.be/BSOPmUo-BNo?t=7" },
+  { title: "Kummeli – Panomies", aliases: ["Panomies"], youtube: "https://youtu.be/jrqEe6XK3VI?t=60" },
+  { title: "Kummeli – Älykääpiöt", aliases: ["Älykääpiö", "esa nahka" ,"tero nuppi"], youtube: "https://youtu.be/mQ1jjbdGwhk" },
 
   // ---------- Muu TV ja elokuvat ----------
   { title: "Olitkos vielä nukkumassa?", aliases: ["Uuno nukkumassa", "Olitko vielä nukkumassa"], youtube: "https://www.youtube.com/watch?v=L5illCCR70U" },
