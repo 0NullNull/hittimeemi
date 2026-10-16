@@ -93,6 +93,23 @@
 
   const meme = () => MEMES[game.index];
 
+  // Vapaa pelaus toimii kuin sekoitettu korttipakka: jokainen meemi tulee kerran
+  // ennen kuin mikään toistuu. Pelatut tallennetaan nimellä, joten listan
+  // muokkaaminen ei sotke kirjanpitoa.
+  function pickFreeIndex() {
+    const seen = new Set(store.get("hm-free-seen", []));
+    let options = MEMES.map((_, i) => i).filter((i) => !seen.has(MEMES[i].title));
+    if (!options.length) {
+      // Kaikki pelattu: aloitetaan uusi kierros, mutta ei heti samalla meemillä
+      seen.clear();
+      options = MEMES.map((_, i) => i).filter((i) => !game || MEMES.length < 2 || i !== game.index);
+    }
+    const index = options[Math.floor(Math.random() * options.length)];
+    seen.add(MEMES[index].title);
+    store.set("hm-free-seen", [...seen]);
+    return index;
+  }
+
   function newGame() {
     stopAudio();
     $("message").textContent = "";
@@ -107,9 +124,7 @@
         ? { index, guesses: saved.guesses, done: saved.done, won: saved.won }
         : { index, guesses: [], done: false, won: false };
     } else {
-      let index = Math.floor(Math.random() * MEMES.length);
-      if (game && MEMES.length > 1 && index === game.index) index = (index + 1) % MEMES.length;
-      game = { index, guesses: [], done: false, won: false };
+      game = { index: pickFreeIndex(), guesses: [], done: false, won: false };
     }
 
     backend = meme().videoId ? youtubeBackend : fileBackend;
