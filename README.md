@@ -1,6 +1,6 @@
 # Hittimeemi
 
-A Heardle-style guessing game for Finnish memes. You hear 0.1 s of the clip, then 0.5 s, 1 s, 2 s, 5 s and 10 s. Each wrong guess or skip unlocks a longer clip. When the round is over, the YouTube video is revealed.
+A Heardle-style guessing game for Finnish memes. You hear 0.5 s of the clip, then 1 s, 2 s, 4 s, 8 s and 15 s. Each wrong guess or skip unlocks a longer clip. When the round is over, the YouTube video is revealed.
 
 ## Running it
 
