@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="fi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hittimeemi</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Hittimeemi</h1>
+    <nav class="modes">
+      <button data-mode="daily" class="active">Päivän meemi</button>
+      <button data-mode="free">Vapaa pelaus</button>
+    </nav>
+  </header>
+
+  <main>
+    <ol id="board"></ol>
+
+    <div id="bar"></div>
+    <div class="player">
+      <span id="time">0,0 s</span>
+      <button id="play" aria-label="Soita">▶</button>
+      <span id="limit">0,1 s</span>
+    </div>
+
+    <div id="input-area">
+      <div class="search">
+        <input id="guess" type="text" autocomplete="off" placeholder="Mikä meemi tämä on?">
+        <ul id="suggestions" hidden></ul>
+      </div>
+      <div class="actions">
+        <button id="skip">Ohita (+0,4 s)</button>
+        <button id="submit" class="primary">Arvaa</button>
+      </div>
+      <p id="message"></p>
+    </div>
+
+    <div id="result" hidden>
+      <h2 id="result-title"></h2>
+      <p id="result-answer"></p>
+      <div class="actions">
+        <button id="play-full">▶ Kuuntele koko pätkä</button>
+        <button id="share" class="primary">Jaa tulos</button>
+        <button id="next" class="primary">Seuraava meemi</button>
+      </div>
+      <p id="countdown"></p>
+      <div id="stats"></div>
+    </div>
+
+    <div id="yt-wrap"><div id="yt-player"></div></div>
+  </main>
+
+  <script src="memes.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
