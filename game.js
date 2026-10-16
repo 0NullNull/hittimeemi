@@ -1,14 +1,16 @@
 (() => {
   // Kuinka pitkä pätkä kuullaan kullakin yrityksellä (sekunteina)
-  const STEPS = [0.1, 0.5, 1, 2, 5, 10];
-  // Kuinka pitkään "Kuuntele koko pätkä" soittaa
-  const FULL_LENGTH = 20;
+  const STEPS = [0.5, 1, 2, 4, 8, 15];
+  // Kuinka pitkään "Kuuntele pidempi pätkä" soittaa
+  const FULL_LENGTH = 30;
   // Päivä, josta päivän meemien numerointi alkaa
   const EPOCH = Date.UTC(2026, 0, 1);
 
   const MEMES = window.MEMES || [];
   const $ = (id) => document.getElementById(id);
   const fmt = (s) => s.toFixed(1).replace(".", ",") + " s";
+  // Pätkän pituus ilman turhaa desimaalia: "0,5 s", "2 s"
+  const secs = (s) => String(+s.toFixed(1)).replace(".", ",") + " s";
   const norm = (s) =>
     s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]/g, "");
 
@@ -331,19 +333,28 @@
   }
 
   function updatePlayButtons() {
-    $("play").textContent = playing ? "■" : "▶";
-    $("play-full").textContent = playing ? "■ Pysäytä" : "▶ Kuuntele koko pätkä";
+    $("play").classList.toggle("playing", playing);
+    $("play").setAttribute("aria-label", playing ? "Pysäytä" : "Soita");
+    $("play-full").textContent = playing ? "■ Pysäytä" : "▶ Kuuntele pidempi pätkä";
   }
+
+  const ICONS = { wrong: "✕", skip: "↷", correct: "✓" };
 
   function render() {
     const g = game.guesses.length;
 
     $("board").innerHTML = "";
     for (let i = 0; i < STEPS.length; i++) {
+      const guess = game.guesses[i];
       const li = document.createElement("li");
-      if (game.guesses[i]) {
-        li.className = game.guesses[i].type;
-        li.textContent = (game.guesses[i].type === "wrong" ? "✗ " : "") + game.guesses[i].text;
+      li.innerHTML = `<span class="len">${secs(STEPS[i])}</span><span class="txt"></span><span class="icon"></span>`;
+      if (guess) {
+        li.className = guess.type;
+        li.querySelector(".txt").textContent = guess.text;
+        li.querySelector(".icon").textContent = ICONS[guess.type];
+      } else if (!game.done && i === g) {
+        li.className = "current";
+        li.querySelector(".txt").textContent = "Kuuntele ja arvaa";
       }
       $("board").appendChild(li);
     }
@@ -351,12 +362,14 @@
     const unlocked = game.done ? STEPS.length : g + 1;
     $("bar").innerHTML = STEPS.map((_, i) =>
       `<div class="seg${i < unlocked ? " unlocked" : ""}"><div class="fill"></div></div>`).join("");
+    $("ticks").innerHTML = STEPS.map((s, i) =>
+      `<span${i < unlocked ? ' class="unlocked"' : ""}>${String(s).replace(".", ",")}</span>`).join("");
 
     $("limit").textContent = fmt(currentLimit());
     $("time").textContent = fmt(0);
 
     const last = g >= STEPS.length - 1;
-    $("skip").textContent = last ? "Luovuta" : `Ohita (+${fmt(STEPS[g + 1] - STEPS[g])})`;
+    $("skip").textContent = last ? "Luovuta" : `Ohita (+${secs(STEPS[g + 1] - STEPS[g])})`;
 
     $("input-area").hidden = game.done;
     $("result").hidden = !game.done;
@@ -371,10 +384,12 @@
   }
 
   function renderResult() {
+    $("result-emoji").textContent = game.won ? (game.guesses.length === 1 ? "🤯" : "🎉") : "😔";
     $("result-title").textContent = game.won
-      ? `Oikein! ${fmt(STEPS[game.guesses.length - 1])} riitti 🎉`
-      : "Ei tällä kertaa 😔";
+      ? `Oikein! ${secs(STEPS[game.guesses.length - 1])} riitti`
+      : "Ei tällä kertaa";
     $("result-answer").textContent = meme().title;
+    $("result-squares").textContent = squares();
 
     const daily = mode === "daily";
     $("share").hidden = !daily;
@@ -395,10 +410,10 @@
   function updateCountdown() {
     const now = new Date();
     const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
-    const secs = Math.floor((midnight - now) / 1000);
+    const left = Math.floor((midnight - now) / 1000);
     const pad = (n) => String(n).padStart(2, "0");
     $("countdown").textContent =
-      `Uusi meemi ${Math.floor(secs / 3600)}:${pad(Math.floor(secs / 60) % 60)}:${pad(secs % 60)} kuluttua`;
+      `Uusi meemi ${Math.floor(left / 3600)}:${pad(Math.floor(left / 60) % 60)}:${pad(left % 60)} kuluttua`;
   }
 
   setInterval(() => {
@@ -407,14 +422,17 @@
     else if (game.done) updateCountdown();
   }, 1000);
 
-  async function share() {
-    const squares = STEPS.map((_, i) => {
+  function squares() {
+    return STEPS.map((_, i) => {
       const g = game.guesses[i];
       if (!g) return "⬜";
       return { correct: "🟩", wrong: "🟥", skip: "⬛" }[g.type];
     }).join("");
+  }
+
+  async function share() {
     const url = location.protocol.startsWith("http") ? "\n" + location.href.split("#")[0] : "";
-    const text = `Hittimeemi #${day + 1}\n🔊${squares}${url}`;
+    const text = `Hittimeemi #${day + 1}\n🔊${squares()}${url}`;
     try {
       if (navigator.share) {
         await navigator.share({ text });
@@ -486,6 +504,15 @@
   $("skip").addEventListener("click", skip);
   $("next").addEventListener("click", newGame);
   $("share").addEventListener("click", share);
+  $("help-btn").addEventListener("click", () => $("help").showModal());
+  $("help-first").textContent = secs(STEPS[0]).replace(" s", " sekuntia");
+  const rest = STEPS.slice(1).map(secs);
+  $("help-steps").textContent = rest.slice(0, -1).join(", ") + " ja " + rest[rest.length - 1];
+  // Ohjeet näytetään automaattisesti ensimmäisellä käynnillä
+  if (!store.get("hm-seen-help", false)) {
+    $("help").showModal();
+    store.set("hm-seen-help", true);
+  }
 
   document.querySelectorAll(".modes button").forEach((btn) =>
     btn.addEventListener("click", () => {

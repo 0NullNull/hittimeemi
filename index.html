@@ -4,53 +4,98 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Hittimeemi</title>
+  <meta name="description" content="Tunnistatko suomimeemin puolessa sekunnissa? Uusi meemi joka päivä.">
+
+  <!-- Linkin esikatselu Discordissa, WhatsAppissa, X:ssä jne. -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Hittimeemi">
+  <meta property="og:title" content="Hittimeemi – arvaa suomimeemi">
+  <meta property="og:description" content="Tunnistatko suomimeemin puolessa sekunnissa? Uusi meemi joka päivä.">
+  <meta property="og:url" content="https://hittimeemi.kuirinlahti.dev/">
+  <meta property="og:image" content="https://hittimeemi.kuirinlahti.dev/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#2f80ed">
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%233d7bff'/%3E%3Cg fill='white'%3E%3Crect x='7' y='13' width='3' height='6' rx='1.5'/%3E%3Crect x='12' y='9' width='3' height='14' rx='1.5'/%3E%3Crect x='17' y='6' width='3' height='20' rx='1.5'/%3E%3Crect x='22' y='11' width='3' height='10' rx='1.5'/%3E%3C/g%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
-    <h1>Hittimeemi</h1>
-    <nav class="modes">
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 32 32" aria-hidden="true">
+        <rect width="32" height="32" rx="8" />
+        <g><rect x="7" y="13" width="3" height="6" rx="1.5"/><rect x="12" y="9" width="3" height="14" rx="1.5"/><rect x="17" y="6" width="3" height="20" rx="1.5"/><rect x="22" y="11" width="3" height="10" rx="1.5"/></g>
+      </svg>
+      <h1>Hittimeemi</h1>
+    </div>
+    <nav class="modes" aria-label="Pelitila">
       <button data-mode="daily" class="active">Päivän meemi</button>
       <button data-mode="free">Vapaa pelaus</button>
     </nav>
+    <button id="help-btn" class="icon-btn" aria-label="Ohjeet">?</button>
   </header>
 
   <main>
     <ol id="board"></ol>
 
-    <div id="bar"></div>
-    <div class="player">
-      <span id="time">0,0 s</span>
-      <button id="play" aria-label="Soita">▶</button>
-      <span id="limit">0,1 s</span>
-    </div>
+    <section class="card player-card">
+      <div id="bar"></div>
+      <div id="ticks"></div>
+      <div class="player">
+        <span id="time">0,0 s</span>
+        <button id="play" aria-label="Soita">
+          <svg class="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z"/></svg>
+          <svg class="i-stop" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2.5"/></svg>
+        </button>
+        <span id="limit">0,1 s</span>
+      </div>
+    </section>
 
-    <div id="input-area">
+    <section id="input-area">
       <div class="search">
-        <input id="guess" type="text" autocomplete="off" placeholder="Mikä meemi tämä on?">
+        <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="guess" type="text" autocomplete="off" spellcheck="false" placeholder="Mikä meemi tämä on?">
         <ul id="suggestions" hidden></ul>
       </div>
       <div class="actions">
-        <button id="skip">Ohita (+0,4 s)</button>
-        <button id="submit" class="primary">Arvaa</button>
+        <button id="skip" class="btn">Ohita</button>
+        <button id="submit" class="btn primary">Arvaa</button>
       </div>
-      <p id="message"></p>
-    </div>
+      <p id="message" role="status"></p>
+    </section>
 
-    <div id="result" hidden>
+    <section id="result" class="card" hidden>
+      <div id="result-emoji"></div>
       <h2 id="result-title"></h2>
       <p id="result-answer"></p>
+      <div id="result-squares"></div>
       <div class="actions">
-        <button id="play-full">▶ Kuuntele koko pätkä</button>
-        <button id="share" class="primary">Jaa tulos</button>
-        <button id="next" class="primary">Seuraava meemi</button>
+        <button id="play-full" class="btn">Kuuntele pidempi pätkä</button>
+        <button id="share" class="btn primary">Jaa tulos</button>
+        <button id="next" class="btn primary">Seuraava meemi →</button>
       </div>
       <p id="countdown"></p>
       <div id="stats"></div>
-    </div>
+    </section>
 
     <div id="yt-wrap"><div id="yt-player"></div></div>
   </main>
+
+  <dialog id="help">
+    <h2>Näin pelaat</h2>
+    <ol>
+      <li>Paina <b>▶</b> ja kuuntele pätkä suomalaisesta meemistä.</li>
+      <li>Aluksi kuulet vain <b id="help-first"></b>. Jokainen väärä arvaus tai ohitus pidentää pätkää: <span id="help-steps"></span>.</li>
+      <li>Kirjoita arvaus ja valitse meemi listasta. Kuusi yritystä.</li>
+    </ol>
+    <p><b>Päivän meemi</b> on kaikille sama ja vaihtuu keskiyöllä. <b>Vapaalla pelauksella</b> voit pelata niin paljon kuin huvittaa.</p>
+    <form method="dialog"><button class="btn primary">Pelaamaan!</button></form>
+  </dialog>
 
   <script src="memes.js"></script>
   <script src="game.js"></script>
