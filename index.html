@@ -52,7 +52,17 @@
           <svg class="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z"/></svg>
           <svg class="i-stop" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2.5"/></svg>
         </button>
-        <span id="limit">0,1 s</span>
+        <span id="limit">0,5 s</span>
+      </div>
+      <div class="volume">
+        <button id="mute" class="vol-btn" aria-label="Mykistä">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path class="speaker" d="M4 9h3.5L12 5v14l-4.5-4H4z"/>
+            <path class="wave" d="M15.5 8.5a5 5 0 0 1 0 7M18 6a8.5 8.5 0 0 1 0 12"/>
+            <path class="cross" d="m16 9.5 5 5m0-5-5 5"/>
+          </svg>
+        </button>
+        <input id="volume" type="range" min="0" max="100" step="1" aria-label="Äänenvoimakkuus">
       </div>
     </section>
 

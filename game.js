@@ -203,6 +203,7 @@
   let playing = false;
   let playLimit = 0;
   let safetyTimer = null;
+  let volume = store.get("hm-volume", 80); // 0–100
 
   const fileBackend = (() => {
     const audio = new Audio();
@@ -229,6 +230,7 @@
       },
       stop() { audio.pause(); },
       elapsed() { return audio.currentTime - current.start; },
+      setVolume(v) { audio.volume = v / 100; },
     };
   })();
 
@@ -255,7 +257,7 @@
           player = new YT.Player("yt-player", {
             playerVars: { controls: 0, disablekb: 1, playsinline: 1, rel: 0, iv_load_policy: 3 },
             events: {
-              onReady: () => resolve(),
+              onReady: () => { player.setVolume(volume); resolve(); },
               onStateChange: (e) => {
                 if (e.data === YT.PlayerState.PLAYING && wantPlay) {
                   wantPlay = false;
@@ -294,6 +296,7 @@
       },
       stop() { wantPlay = false; if (player && player.pauseVideo) player.pauseVideo(); },
       elapsed() { return (performance.now() - startedAt) / 1000; },
+      setVolume(v) { if (player && player.setVolume) player.setVolume(v); },
     };
   })();
 
@@ -468,7 +471,7 @@
     activeSuggestion = -1;
     if (!q) { hideSuggestions(); return; }
     const matches = MEMES.filter((m) =>
-      [m.title, ...(m.aliases || [])].some((name) => norm(name).includes(q))).slice(0, 8);
+      [m.title, ...(m.aliases || [])].some((name) => norm(name).includes(q))).slice(0, 20);
     if (!matches.length) { hideSuggestions(); return; }
     list.innerHTML = "";
     for (const m of matches) {
@@ -519,6 +522,27 @@
   $("skip").addEventListener("click", skip);
   $("next").addEventListener("click", newGame);
   $("share").addEventListener("click", share);
+
+  // ---------- Äänenvoimakkuus ----------
+
+  let volumeBeforeMute = volume || 80;
+
+  function applyVolume() {
+    fileBackend.setVolume(volume);
+    youtubeBackend.setVolume(volume);
+    $("volume").value = volume;
+    $("volume").style.setProperty("--val", volume + "%");
+    $("mute").classList.toggle("muted", volume === 0);
+    $("mute").setAttribute("aria-label", volume === 0 ? "Palauta ääni" : "Mykistä");
+    store.set("hm-volume", volume);
+  }
+
+  $("volume").addEventListener("input", (e) => { volume = +e.target.value; applyVolume(); });
+  $("mute").addEventListener("click", () => {
+    if (volume > 0) { volumeBeforeMute = volume; volume = 0; } else { volume = volumeBeforeMute; }
+    applyVolume();
+  });
+  applyVolume();
   $("help-btn").addEventListener("click", () => $("help").showModal());
   $("help-first").textContent = secs(STEPS[0]).replace(" s", " sekuntia");
   const rest = STEPS.slice(1).map(secs);

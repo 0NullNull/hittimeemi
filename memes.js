@@ -14,7 +14,13 @@ window.MEMES = [
   { title: "Puuhöylä", aliases: ["Voittopotti", "Hasita vittu", "Tony Hällfors"], youtube: "https://youtu.be/rJrEe8_gi64?t=145" },
   { title: "Karhu vie roskat", aliases: ["Perkele, siihen et koske", "Siihen et koske", "Karhumies", "Karhu"], youtube: "https://youtu.be/6x9hNk1dk_o?t=2" },
   { title: "Kylläpä kiehahti", aliases: ["Kylläpäs kiehahti", "Kiehahti", "Coca-Cola"], youtube: "https://youtu.be/KXkFLqJWT1A" },
-  { title: "Laihian Alko", aliases: ["Laihia", "Alko", "Loppukevennys"], youtube: "https://www.youtube.com/watch?v=A-oIZNc2e1k" },
+  { title: "Kaminaa lämpöö", aliases: ["Kamiinaa lämpöö", "Kamiina", "Kamina"], youtube: "https://www.youtube.com/watch?v=M90uV16YgpE" },
+  { title: "Älä tuu kurkistelee", aliases: ["Kurkistelee", "Älä tule kurkistelemaan"], youtube: "https://www.youtube.com/watch?v=bV8Hgn2-5tw" },
+  { title: "Tuli iso jytky", aliases: ["Iso jytky", "Jytky", "Soini"], youtube: "https://www.youtube.com/watch?v=HLJAuYhJtJ4" },
+  { title: "The Wall Suomi – Mitä vittua", aliases: ["The Wall", "Mitä vittua"], youtube: "https://youtu.be/uzHaV0tq3Sg?t=29" },
+  { title: "Mitä saisi olla saatana", aliases: ["Mitä saisi olla", "Mitä saisi olla, saatana"], youtube: "https://www.youtube.com/watch?v=eAk1wBPanVc" },
+  { title: "Markku se sinua kuristi", aliases: ["Markku", "Kuristi"], youtube: "https://www.youtube.com/watch?v=aothrVvyCk0" },
+  { title: "Mikä on Suomen kansalliskala? – Joutsen", aliases: ["Suomen kansalliskala", "Kansalliskala", "Joutsen", "Seksikäs-Suklaa", "Seksikäs Suklaa"], youtube: "https://www.youtube.com/watch?v=Ij2PRA8iGZ4" },
 
   // ---------- Tubettajat ----------
   { title: "Risumies", youtube: "https://youtu.be/2PT4aRyqeoI?t=30" },
@@ -22,22 +28,47 @@ window.MEMES = [
   { title: "Arkkivihollinen on palannut", aliases: ["Arkkivihollinen", "Vitun grilli", "Grilli", "Markoboy grilli"], youtube: "https://youtu.be/tCrn38XM-vE?t=89" },
   { title: "Niilo22 – Vituttaa", aliases: ["Niilo22", "Niilo", "Vituttaa"], youtube: "https://www.youtube.com/watch?v=mKLlYlyZvlA" },
 
-  // ---------- TV ja elokuvat ----------
-  { title: "Tonnin seteli", aliases: ["Se oli tonnin seteli", "Tonni"], youtube: "https://youtu.be/mHvBvkSCx2w?t=24" },
-  { title: "Jankon Betoni", aliases: ["Jankko", "Kalervo Jankko", "Betoni"], youtube: "https://youtu.be/A7_Qko2xrjA?t=37" },
-  { title: "Pihamökin vuokraus", aliases: ["Ei se oo kun parin kuun vuokra", "Parin kuun vuokra", "Pihamökki"], youtube: "https://www.youtube.com/watch?v=tRkWpO053AQ" },
-  { title: "Jakke ja Sepi – Johdot", aliases: ["Jakke ja Sepi", "Jakke", "Sepi", "Johdot"], youtube: "https://www.youtube.com/watch?v=OmtFiz7XCeU" },
-  { title: "Olitkos vielä nukkumassa?", aliases: ["Uuno Turhapuro", "Uuno", "Olitko vielä nukkumassa"], youtube: "https://www.youtube.com/watch?v=L5illCCR70U" },
-  { title: "Spede Show – Viimeinen tupakka", aliases: ["Spede", "Spede Show", "Viimeinen tupakka", "Kuolemaantuomittu"], youtube: "https://www.youtube.com/watch?v=lo74-Dmx8wA" },
+  // ---------- Kummeli ----------
+  // Jokaisella on "Kummeli …"-alias, jotta "kummeli" kirjoittamalla löytyvät kaikki
+  { title: "Tonnin seteli", aliases: ["Kummeli – Tonnin seteli", "Se oli tonnin seteli", "Tonni"], youtube: "https://youtu.be/mHvBvkSCx2w?t=24" },
+  { title: "Jankon Betoni", aliases: ["Kummeli – Jankon Betoni", "Jankko", "Kalervo Jankko", "Betoni"], youtube: "https://youtu.be/A7_Qko2xrjA?t=37" },
+  { title: "Kummeli – Biologian tunti", aliases: ["Biologian tunti", "Speedy ja Saku: Biologian tunti"], youtube: "https://www.youtube.com/watch?v=fuYyPqtSVUw" },
+  { title: "Kummeli – Puukässä", aliases: ["Puukässä", "Speedy ja Saku: Puukässä", "Puukäsityö"], youtube: "https://www.youtube.com/watch?v=kCTURSJmvdY" },
+  { title: "Hei mulla on reikiä päässä", aliases: ["Kummeli – Reikiä päässä", "Reikiä päässä", "Mulla on reikiä päässä"], youtube: "https://www.youtube.com/watch?v=BSOPmUo-BNo" },
+  { title: "Kummeli – Panomies", aliases: ["Panomies"], youtube: "https://www.youtube.com/watch?v=jrqEe6XK3VI" },
+  { title: "Kummeli – Autonmyyjät", aliases: ["Autonmyyjät", "Autokauppa"], youtube: "https://www.youtube.com/watch?v=ZmD_wxBfo74" },
+  { title: "Kummeli – Rapakymppi", aliases: ["Rapakymppi"], youtube: "https://www.youtube.com/watch?v=EVjrpImlLMY" },
+  { title: "Kummeli – Verotarkastaja", aliases: ["Verotarkastaja", "Verottaja"], youtube: "https://www.youtube.com/watch?v=INni5QOKGAc" },
+  { title: "Kummeli – Bemarin laina", aliases: ["Bemarin laina", "Bemari"], youtube: "https://www.youtube.com/watch?v=UZy-z2ocsMo" },
+  { title: "Kummeli – Pääministeri", aliases: ["Pääministeri"], youtube: "https://www.youtube.com/watch?v=TVHUMH9liA4" },
+  { title: "Kummeli – Kreikkalainen tarjoilija", aliases: ["Kreikkalainen tarjoilija", "Tarjoilija"], youtube: "https://www.youtube.com/watch?v=Uo-KGK0Zqtw" },
+  { title: "Kummeli – Ilmoituksella kirvesmies", aliases: ["Ilmoituksella kirvesmies", "Kirvesmies"], youtube: "https://www.youtube.com/watch?v=fbjOV95VBOE" },
+  { title: "Kummeli – En lähde, en ole", aliases: ["En lähde, en ole", "En lähde", "Naapuri"], youtube: "https://www.youtube.com/watch?v=RXLopKnRH58" },
+  { title: "Kummeli Kultakuume – Jumalauta!", aliases: ["Kultakuume", "Jumalauta"], youtube: "https://www.youtube.com/watch?v=y8k4SsBJ938" },
+
+  // ---------- Muu TV ja elokuvat ----------
+  { title: "Olitkos vielä nukkumassa?", aliases: ["Uuno nukkumassa", "Olitko vielä nukkumassa"], youtube: "https://www.youtube.com/watch?v=L5illCCR70U" },
+  { title: "Tupakan mittane tauko", aliases: ["Uuno tupakka", "Tupakka", "Tupakkatauko"], youtube: "https://youtu.be/kb6cpwAnShk?t=46" },
   { title: "Tsajajajaja", aliases: ["Ismo", "Ismo Laitela", "Salkkarit", "Tsajajaja"], youtube: "https://youtu.be/UZMcLnccE-I?t=15" },
   { title: "Ämmä alkaa disrispektaa", aliases: ["Disrispektaa", "Au pairit", "Au pairit Panamassa", "Tiia"], youtube: "https://youtu.be/p83lSCGY3Q8?t=3" },
-  { title: "Tämä on vettä", aliases: ["Muumit", "Muumilaakso", "Vettä"], youtube: "https://www.youtube.com/shorts/jNcg6IOiLhg" },
 
+  // ---------- Justimusfilms ----------
+  { title: "Justimusfilms – Kevätjuhla", aliases: ["Kevätjuhla", "Justimus kevätjuhla"], youtube: "https://youtu.be/HPMTDaxGQl8?t=47" },
+  { title: "Justimusfilms – Aamunavaus", aliases: ["Aamunavaus", "Justimus aamunavaus"], youtube: "https://youtu.be/IAGuoo_uhUM?t=103" },
+  { title: "Justimusfilms – Et uskalla", aliases: ["Et uskalla", "Justimus et uskalla"], youtube: "https://youtu.be/KnYPVO3bFFc?t=10" },
+  { title: "Justimusfilms – Keltainen auto", aliases: ["Keltainen auto", "Justimus keltainen auto"], youtube: "https://youtu.be/k9FPgPuhU-w?t=13" },
+  { title: "Justimusfilms – Santeri", aliases: ["Santeri", "Justimus santeri"], youtube: "https://youtu.be/_BLOcUv-UY4" },
+  { title: "Justimusfilms – Autokoulu: Masa", aliases: ["Autokoulu", "Masa", "Justimus autokoulu"], youtube: "https://youtu.be/M4jvynnzMgk?t=180" },
+  { title: "Justimusfilms – Suomalainen mies lääkärissä", aliases: ["Suomalainen mies lääkärissä", "Lääkärissä", "Justimus lääkäri"], youtube: "https://www.youtube.com/watch?v=CmQeCSQal6U" },
+  { title: "Justimusfilms – Päiväni kalareissulla", aliases: ["Päiväni kalareissulla", "Kalareissu", "Justimus kalareissu"], youtube: "https://www.youtube.com/watch?v=PlHYu33tkBM" },
+  { title: "Justimusfilms – Lanit", aliases: ["Masa Teurastaja", "Justimus Lanit"], youtube: "https://youtu.be/lcb8uafr0cw?t=35" },
+
+  
   // ---------- Urheilu ----------
-  { title: "Seppo Räty – Hall of Fame -haastattelu", aliases: ["Seppo Räty", "Räty", "Urheilugaala"], youtube: "https://www.youtube.com/watch?v=QfXbFMZ3zKE" },
   { title: "Mertaranta – Granlundin ilmaveivi", aliases: ["Mertaranta", "Granlund", "Ilmaveivi", "MM 2011"], youtube: "https://www.youtube.com/watch?v=kqRyUSw6WjY" },
-  { title: "Matti Nykänen – Ehkä on, ehkä ei", aliases: ["Matti Nykänen", "Nykänen", "Ehkä on ehkä ei", "Normien mukaan"], youtube: "https://www.youtube.com/watch?v=GZ_s5yYfSpA" },
+  { title: "Matti Nykänen – Ehkä on, ehkä ei", aliases: ["Matti Nykänen", "Nykänen", "Ehkä on ehkä ei", "Normien mukaan"], youtube: "https://youtu.be/GZ_s5yYfSpA?t=22" },
 
   // ---------- Muut ----------
   { title: "Do you know da wae", aliases: ["Ugandan Knuckles", "Do you know the way", "Da wae"], youtube: "https://youtu.be/P31z2qbErpc" },
+  { title: "Jari sinut pittää nyt tappaa", aliases: ["Jari", "Jari sinut pitää nyt tappaa"], youtube: "https://www.youtube.com/watch?v=32_wX1eDe_M" },
 ];
