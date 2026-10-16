@@ -94,23 +94,33 @@
   const meme = () => MEMES[game.index];
 
   // Vapaa pelaus toimii kuin sekoitettu korttipakka: jokainen meemi tulee kerran
-  // ennen kuin mikään toistuu. Pelatut tallennetaan nimellä, joten listan
-  // muokkaaminen ei sotke kirjanpitoa.
-  function pickFreeIndex() {
-    const seen = new Set(store.get("hm-free-seen", []));
-    let options = MEMES.map((_, i) => i).filter((i) => !seen.has(MEMES[i].title));
-    if (!options.length) {
-      // Kaikki pelattu: aloitetaan uusi kierros, mutta ei heti samalla meemillä
-      seen.clear();
-      options = MEMES.map((_, i) => i).filter((i) => !game || MEMES.length < 2 || i !== game.index);
-    }
-    const index = options[Math.floor(Math.random() * options.length)];
-    seen.add(MEMES[index].title);
-    store.set("hm-free-seen", [...seen]);
-    return index;
+  // ennen kuin mikään toistuu. Meemi lasketaan pelatuksi vasta, kun sen kierros
+  // on loppunut. Pelatut tallennetaan nimellä, joten listan muokkaaminen ei
+  // sotke kirjanpitoa (poistetut eivät lasketa, uudet ovat pelaamattomia).
+  function freeDone() {
+    const titles = new Set(MEMES.map((m) => m.title));
+    return new Set(store.get("hm-free-done", []).filter((t) => titles.has(t)));
   }
 
-  function newGame() {
+  function pickFreeIndex() {
+    const done = freeDone();
+    const notCurrent = (i) => !game || MEMES.length < 2 || i !== game.index;
+    let options = MEMES.map((_, i) => i).filter((i) => !done.has(MEMES[i].title) && notCurrent(i));
+    if (!options.length) {
+      // Kaikki pelattu: uusi kierros alkaa, mutta ei heti samalla meemillä
+      store.set("hm-free-done", []);
+      options = MEMES.map((_, i) => i).filter(notCurrent);
+    }
+    return options[Math.floor(Math.random() * options.length)];
+  }
+
+  function saveFree() {
+    if (mode !== "free") return;
+    store.set("hm-free-current", { title: meme().title, ...game });
+    if (game.done) store.set("hm-free-done", [...freeDone().add(meme().title)]);
+  }
+
+  function newGame(forceNew = false) {
     stopAudio();
     $("message").textContent = "";
     $("guess").value = "";
@@ -124,7 +134,15 @@
         ? { index, guesses: saved.guesses, done: saved.done, won: saved.won }
         : { index, guesses: [], done: false, won: false };
     } else {
-      game = { index: pickFreeIndex(), guesses: [], done: false, won: false };
+      // Jatketaan kesken jäänyttä kierrosta (esim. sivun päivityksen jälkeen)
+      const saved = store.get("hm-free-current", null);
+      const index = saved ? MEMES.findIndex((m) => m.title === saved.title) : -1;
+      if (!forceNew && index >= 0) {
+        game = { index, guesses: saved.guesses, done: saved.done, won: saved.won };
+      } else {
+        game = { index: pickFreeIndex(), guesses: [], done: false, won: false };
+        saveFree();
+      }
     }
 
     backend = meme().videoId ? youtubeBackend : fileBackend;
@@ -162,6 +180,7 @@
     }
     if (game.done) recordStats();
     saveDaily();
+    saveFree();
     stopAudio();
     render();
   }
@@ -358,6 +377,18 @@
 
   const ICONS = { wrong: "✕", skip: "↷", correct: "✓" };
 
+  // Vapaan pelauksen laskuri: montako meemiä tällä kierroksella on vielä pelaamatta
+  function renderProgress() {
+    $("progress").hidden = mode !== "free";
+    if (mode !== "free") return;
+    const total = MEMES.length;
+    const left = total - freeDone().size;
+    $("progress-bar").style.width = ((total - left) / total) * 100 + "%";
+    $("progress-text").textContent = left === 0
+      ? `Kaikki ${total} meemiä pelattu! 🎉 Seuraavasta alkaa uusi kierros.`
+      : `${left} / ${total} meemiä jäljellä`;
+  }
+
   function render() {
     const g = game.guesses.length;
 
@@ -389,6 +420,7 @@
     const last = g >= STEPS.length - 1;
     $("skip").textContent = last ? "Luovuta" : `Ohita (+${secs(STEPS[g + 1] - STEPS[g])})`;
 
+    renderProgress();
     $("input-area").hidden = game.done;
     $("result").hidden = !game.done;
     // Video piilotetaan arvailun ajaksi ja näytetään, kun kierros on ohi
@@ -520,7 +552,7 @@
   $("play-full").addEventListener("click", () => playClip(FULL_LENGTH));
   $("submit").addEventListener("click", submitGuess);
   $("skip").addEventListener("click", skip);
-  $("next").addEventListener("click", newGame);
+  $("next").addEventListener("click", () => newGame(true));
   $("share").addEventListener("click", share);
 
   // ---------- Äänenvoimakkuus ----------

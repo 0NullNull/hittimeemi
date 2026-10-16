@@ -41,6 +41,11 @@
   </header>
 
   <main>
+    <div id="progress" hidden>
+      <span id="progress-text"></span>
+      <div class="progress-track"><div id="progress-bar"></div></div>
+    </div>
+
     <ol id="board"></ol>
 
     <section class="card player-card">
@@ -107,7 +112,15 @@
     <form method="dialog"><button class="btn primary">Pelaamaan!</button></form>
   </dialog>
 
-  <script src="memes.js"></script>
-  <script src="game.js"></script>
+  <script>
+    // Ladataan aina tuorein versio: GitHub Pages antaa selaimen pitää tiedostoja
+    // välimuistissa 10 min, jolloin poistetut meemit näkyisivät vielä.
+    for (const src of ["memes.js", "game.js"]) {
+      const s = document.createElement("script");
+      s.src = src + "?v=" + Date.now();
+      s.async = false; // säilyttää järjestyksen: memes.js ennen game.js:ää
+      document.body.appendChild(s);
+    }
+  </script>
 </body>
 </html>

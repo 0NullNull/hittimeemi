@@ -98,6 +98,21 @@ main { max-width: 560px; margin: 0 auto; padding: 12px 16px 48px; }
   padding: 18px;
 }
 
+/* ---------- Vapaan pelauksen laskuri ---------- */
+
+#progress {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 12px;
+  font-size: 0.82rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+#progress-text { flex: none; }
+.progress-track { flex: 1; height: 4px; border-radius: 99px; background: var(--surface-2); overflow: hidden; }
+#progress-bar { height: 100%; width: 0; background: var(--green); transition: width 0.3s; }
+
 /* ---------- Arvausrivit ---------- */
 
 #board { list-style: none; padding: 0; margin: 0 0 16px; display: grid; gap: 8px; }
