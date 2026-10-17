@@ -30,7 +30,7 @@
     <p>Pieniä, hölmöjä ja hauskoja nettipelejä.</p>
   </header>
 
-  <!-- Pelikortit tulevat tiedostosta ads/games.js — uusi peli lisätään sinne -->
+  <!-- Pelikortit tulevat tiedostosta shared/games.js — uusi peli lisätään sinne -->
   <main class="games" id="games">
     <div class="game soon">
       <div class="placeholder">🎲</div>
@@ -46,14 +46,14 @@
   <script>
     // Ladataan pelilista aina tuoreena (ks. välimuistihuomio hittimeemi/index.html:ssä)
     const list = document.createElement("script");
-    list.src = "ads/games.js?v=" + Date.now();
+    list.src = "shared/games.js?v=" + Date.now();
     list.onload = () => {
       const soon = document.querySelector("#games .soon");
       for (const g of window.GAMES || []) {
         const a = document.createElement("a");
         a.className = "game";
         a.href = g.url.replace(/^\//, ""); // suhteellinen, toimii myös paikallisesti
-        a.innerHTML = `<img src="${g.ad.replace(/^\//, "")}" alt="" loading="lazy">
+        a.innerHTML = `<img src="${g.image.replace(/^\//, "")}" alt="" loading="lazy">
           <div class="info"><h2>${g.title}</h2><p>${g.tagline}</p></div>`;
         soon.before(a);
       }

@@ -23,9 +23,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="/ads/ads.css">
+  <link rel="stylesheet" href="/shared/more-games.css">
 </head>
-<body>
+<body data-game="hittimeemi">
   <a class="home-link" href="../">← Kaikki pelit</a>
   <header>
     <div class="brand">
@@ -51,8 +51,6 @@
     <div class="layout">
     <div class="col-guesses">
       <ol id="board"></ol>
-      <!-- Mainos jostain toisesta sivuston pelistä (ei koskaan tästä) -->
-      <div class="cross-ad" data-game="hittimeemi" hidden></div>
     </div>
 
     <div class="col-play">
@@ -134,7 +132,7 @@
   <script>
     // Ladataan aina tuorein versio: GitHub Pages antaa selaimen pitää tiedostoja
     // välimuistissa 10 min, jolloin poistetut meemit näkyisivät vielä.
-    for (const src of ["memes.js", "game.js", "/ads/games.js", "/ads/ads.js"]) {
+    for (const src of ["memes.js", "game.js", "/shared/games.js", "/shared/more-games.js"]) {
       const s = document.createElement("script");
       s.src = src + "?v=" + Date.now();
       s.async = false; // säilyttää järjestyksen: memes.js ennen game.js:ää

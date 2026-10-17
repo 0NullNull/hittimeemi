@@ -16,8 +16,9 @@ Double-click `start.bat`. It starts a small local server (built into Windows, no
 1. Make a folder, e.g. `my-game/`, with its own `index.html`. Use relative paths (`style.css`, not `/style.css`) so it works both locally and online.
 2. Add a `← Kaikki pelit` link to `../` at the top, like Hittimeemi has.
 3. Give it an `og-image.png` (1200×630) and `og:` meta tags so links look good on Discord.
-4. Register it in [`ads/games.js`](ads/games.js) and put its ad image (1200×630) in `ads/`. That one entry adds its card to the homepage and its ad to every other game.
-5. Add an ad slot to the new game so it promotes the others: include `/ads/ads.css`, `/ads/games.js` and `/ads/ads.js`, and put `<div class="cross-ad" data-game="my-game" hidden></div>` where the ad should go. The slot never shows the game's own ad, and removes itself if there's nothing else to show.
+4. Register it in [`shared/games.js`](shared/games.js) and put its image (1200×630) in `shared/thumbs/`. That one entry adds its card to the homepage and a "Kokeile myös" card for it on every other game.
+5. Let the new game promote the others: put `data-game="my-game"` on its `<body>`, and include `/shared/more-games.css`, `/shared/games.js` and `/shared/more-games.js`. The cards appear outside the game: in the empty side margins on wide screens (right first, left once there are enough games), or at the bottom of the page on narrower ones. A game never promotes itself.
+   - Don't name files or classes with "ad"/"ads". Ad blockers hide them automatically (EasyList hides `.ad-label` and `.ad-cta` on every site).
 6. If the game saves anything in `localStorage`, prefix the keys (Hittimeemi uses `hm-`). All games share one domain, so they share storage.
 
 ## Hittimeemi

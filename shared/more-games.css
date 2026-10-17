@@ -1,0 +1,83 @@
+/* "Kokeile myös" -kortit (shared/more-games.js). Käyttää pelin omia värejä,
+   jos ne on määritelty, muuten oletuksia. */
+
+.mg-side[hidden], .mg-bottom[hidden] { display: none !important; }
+
+/* Sivun reunat leveillä näytöillä: kiinteä paikka, pysyy näkyvissä vierittäessä */
+.mg-side {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.mg-left { left: 0; }
+.mg-right { right: 0; }
+.mg-side .mg-card { pointer-events: auto; }
+
+.mg-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 18px;
+  background: var(--surface, #151829);
+  border: 1px solid var(--border, #272c47);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.35);
+  color: var(--text, #f1f3fb);
+  text-decoration: none;
+  transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+.mg-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent, #3d7bff);
+  box-shadow: 0 22px 50px rgba(0, 0, 0, 0.45);
+}
+.mg-card:focus-visible { outline: 2px solid var(--accent-2, #6aa8ff); outline-offset: 3px; }
+
+.mg-eyebrow {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted, #8b91ad);
+}
+
+.mg-card img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1200 / 630;
+  object-fit: cover;
+  border-radius: 12px;
+  background: var(--surface-2, #1c2036);
+}
+
+.mg-body { display: grid; gap: 4px; }
+.mg-body strong { font: 800 1.35rem/1.15 var(--display, system-ui, sans-serif); }
+.mg-tag { color: var(--muted, #8b91ad); font-size: 0.92rem; line-height: 1.45; }
+
+.mg-play {
+  padding: 11px 14px;
+  border-radius: 12px;
+  background: var(--accent, #3d7bff);
+  color: #fff;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Sivun alalaita kapeammilla näytöillä */
+.mg-bottom { margin: 0 auto 48px; padding: 0 24px; }
+.mg-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 16px;
+  margin-top: 8px;
+}
+.mg-wide { flex-direction: row; align-items: center; gap: 16px; padding: 12px; }
+.mg-wide img { flex: none; width: 160px; }
+.mg-wide .mg-body { flex: 1; min-width: 0; }
+.mg-wide .mg-body strong { font-size: 1.1rem; }
+.mg-wide .mg-play { flex: none; }

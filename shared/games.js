@@ -1,23 +1,26 @@
 // Kaikki sivuston pelit. Uusi peli rekisteröidään lisäämällä rivi tähän:
-// se näkyy silloin etusivulla ja mainoksena kaikissa muissa peleissä.
-//   id      = pelin kansion nimi (sama kuin mainospaikan data-game)
+// se näkyy silloin etusivulla ja "Kokeile myös" -kortteina kaikissa muissa peleissä.
+//   id      = pelin kansion nimi (sama kuin pelisivun <body data-game="…">)
 //   title   = pelin nimi
 //   tagline = lyhyt houkutteleva kuvaus
 //   url     = pelin osoite sivuston juuresta
-//   ad      = mainoskuva (1200×630), mieluiten ads-kansiossa
+//   image   = kuva (1200×630), shared/thumbs-kansiossa
+//
+// Huom: tiedostoissa ja luokissa ei käytetä sanaa "ad"/"ads", koska
+// mainosten estäjät piilottavat sellaiset automaattisesti.
 window.GAMES = [
   {
     id: "hittimeemi",
     title: "Hittimeemi",
     tagline: "Tunnistatko suomimeemin puolessa sekunnissa?",
     url: "/hittimeemi/",
-    ad: "/ads/hittimeemi.png",
+    image: "/shared/thumbs/hittimeemi.png",
   },
   {
     id: "golf",
     title: "Päivän rata",
     tagline: "Uusi minigolfrata ja erikoissääntö joka päivä.",
     url: "/golf/",
-    ad: "/ads/golf.png",
+    image: "/shared/thumbs/golf.png",
   },
 ];

@@ -22,9 +22,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="/ads/ads.css">
+  <link rel="stylesheet" href="/shared/more-games.css">
 </head>
-<body>
+<body data-game="golf">
   <a class="home-link" href="../">← Kaikki pelit</a>
   <header>
     <div class="brand">
@@ -91,7 +91,6 @@
           <h3>Ohjaus</h3>
           <p><b>Vedä hiirellä taaksepäin</b> pallosta ja päästä irti, kuin ritsalla. Mitä pidemmälle vedät, sitä kovempi lyönti. <b>Esc</b> tai hiiren oikea peruu tähtäyksen.</p>
         </section>
-        <div class="cross-ad" data-game="golf" hidden></div>
       </div>
     </div>
   </main>
@@ -113,7 +112,7 @@
   </dialog>
 
   <script>
-    for (const src of ["physics.js", "holes.js", "levels.js", "game.js", "/ads/games.js", "/ads/ads.js"]) {
+    for (const src of ["physics.js", "holes.js", "levels.js", "game.js", "/shared/games.js", "/shared/more-games.js"]) {
       const s = document.createElement("script");
       s.src = src + "?v=" + Date.now();
       s.async = false;
