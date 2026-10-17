@@ -6,6 +6,7 @@ A collection of small browser games, in the style of neal.fun. Each game lives i
 |---|---|
 | Hittimeemi: guess the Finnish meme from a 0.5 s clip | [`hittimeemi/`](hittimeemi/) |
 | Päivän rata: daily 3-hole minigolf with a physics modifier | [`golf/`](golf/) |
+| 50 Hz: build Finland's power grid (incremental, hardcore physics) | [`grid/`](grid/) |
 
 ## Running locally
 
@@ -54,6 +55,15 @@ Every day has a 3-hole course and one modifier (ice, wind, bouncy walls, magneti
 - **Hand-made courses:** add a date to [`golf/holes.js`](golf/holes.js). The file explains the format, and an example sits under `2026-01-01`. A hand-made course always wins over a generated one for that date.
 - **Generated courses:** otherwise the course is built from the date, so everyone gets the same one. A solver simulates thousands of shots to check each hole can be finished in 3 or fewer, and sets par to that number + 1.
 - Physics is in `golf/physics.js` and shared by the game and the solver, so a hole that passes the check plays the same way for players.
+
+## 50 Hz
+
+An incremental grid-building game on a real map of Finland. Start with one gas turbine in a town of your choice, build lines and plants, connect towns as customers, and keep the frequency at 50 Hz.
+
+- **Real data** in `grid/data/` (packed, ~2 MB): Finland's hourly electricity load 2015–2019 (ENTSO-E via Open Power System Data), hourly weather for 16 points (Open-Meteo, CC BY 4.0), Finland outline (Natural Earth). Later game years replay 2015–2019 with 1.2 %/yr demand growth.
+- **Simulation** (`grid/js/sim.js`): unit commitment, merit-order dispatch with frequency reserves, DC power flow (`network.js`), congestion management (redispatch, then controlled load shedding), line overload protection, random faults (storms from real wind), second-by-second frequency transients with inertia, FCR and UFLS, and an N-1 security check.
+- **Tuning**: `grid/js/tech.js` holds plant/line parameters and `ECON` (construction costs at 15 % of real, revenue at real prices).
+- Saves go to `localStorage` (`grid-save-v1`), with export/import from the menu.
 
 ## Hosting
 

@@ -23,4 +23,11 @@ window.GAMES = [
     url: "/golf/",
     image: "/shared/thumbs/golf.png",
   },
+  {
+    id: "grid",
+    title: "50 Hz",
+    tagline: "Rakenna Suomen sähköverkko. Pidä taajuus 50 hertsissä.",
+    url: "/grid/",
+    image: "/shared/thumbs/grid.png",
+  },
 ];

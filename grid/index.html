@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="fi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>50 Hz – rakenna Suomen sähköverkko</title>
+  <meta name="description" content="Rakenna Suomen sähköverkko yhdestä kaasuturbiinista koko maan kantaverkoksi. Todellinen kulutus ja sää, tehonjako, taajuus ja N-1.">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="fun.kuirinlahti.dev">
+  <meta property="og:title" content="50 Hz – rakenna Suomen sähköverkko">
+  <meta property="og:description" content="Pidä taajuus 50 hertsissä. Todellinen kulutus ja sää vuosilta 2015–2019, tehonjako, taajuusreservit ja N-1.">
+  <meta property="og:url" content="https://fun.kuirinlahti.dev/grid/">
+  <meta property="og:image" content="https://fun.kuirinlahti.dev/grid/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#0b0f1a">
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23111827'/%3E%3Cpath d='M4 16c3-9 6-9 8 0s5 9 8 0 5-9 8 0' fill='none' stroke='%2322d3ee' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-game="grid">
+  <header class="topbar">
+    <a class="home-link" href="../" title="Kaikki pelit">←</a>
+    <div class="brand">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M4 16c3-9 6-9 8 0s5 9 8 0 5-9 8 0" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+      <span>50 Hz</span>
+    </div>
+    <div class="clock"><span id="clock-date">–</span><b id="clock-time">–</b></div>
+    <div class="speeds" id="speeds" role="group" aria-label="Pelin nopeus"></div>
+    <div class="money"><b id="money">–</b><span id="money-rate"></span></div>
+    <div class="top-actions">
+      <button id="btn-help" class="icon-btn" title="Ohjeet">?</button>
+      <button id="btn-menu" class="icon-btn" title="Valikko">☰</button>
+    </div>
+  </header>
+
+  <main class="app">
+    <section class="map-wrap">
+      <canvas id="map"></canvas>
+      <div class="toolbar" id="toolbar"></div>
+      <div class="map-hint" id="map-hint"></div>
+      <div class="tooltip" id="tooltip" hidden></div>
+      <div class="toasts" id="toasts"></div>
+      <div class="map-legend">
+        <span><i style="background:#34d399"></i>alle 70 %</span>
+        <span><i style="background:#fbbf24"></i>70–90 %</span>
+        <span><i style="background:#f97316"></i>90–100 %</span>
+        <span><i style="background:#ef4444"></i>ylikuorma</span>
+      </div>
+    </section>
+
+    <aside class="side">
+      <section class="card freq-card">
+        <div class="freq-top">
+          <div>
+            <div class="label">Taajuus</div>
+            <div class="freq" id="freq">50,00 <small>Hz</small></div>
+          </div>
+          <div class="freq-mode" id="freq-mode">–</div>
+        </div>
+        <div class="gauge"><div class="gauge-scale"><span>49,0</span><span>49,5</span><span>50</span><span>50,5</span><span>51,0</span></div><div class="gauge-bar"><i id="gauge-needle"></i></div></div>
+        <div class="freq-sub" id="freq-sub">–</div>
+      </section>
+
+      <section class="kpis" id="kpis"></section>
+
+      <section class="card chart-card">
+        <div class="card-head"><h3>Tuotanto ja kulutus</h3><span class="muted" id="chart-range">48 h</span></div>
+        <canvas id="chart"></canvas>
+        <div class="chart-legend" id="chart-legend"></div>
+      </section>
+
+      <section class="card select-card" id="select-card"></section>
+
+      <section class="card tabs-card">
+        <div class="tabs" role="tablist">
+          <button class="tab active" data-tab="events">Tapahtumat</button>
+          <button class="tab" data-tab="n1">N-1 <span id="n1-badge" class="badge" hidden></span></button>
+          <button class="tab" data-tab="finance">Talous</button>
+          <button class="tab" data-tab="goals">Tavoitteet</button>
+        </div>
+        <div class="tab-body" id="tab-body"></div>
+      </section>
+    </aside>
+  </main>
+
+  <dialog id="dlg-start" class="dlg">
+    <h2>Uusi verkkoyhtiö</h2>
+    <p>Valitse kaupunki, josta aloitat. Saat sinne kaasuturbiinin ja 60 M€ alkupääoman. Tavoite: sähköä koko Suomeen – ja taajuus pysyy 50 hertsissä.</p>
+    <div class="start-list" id="start-list"></div>
+    <p class="muted small">Pienestä kaupungista aloittaminen on haastavampaa. Kulutus ja sää ovat todellisia vuosilta 2015–2019.</p>
+  </dialog>
+
+  <dialog id="dlg-help" class="dlg wide">
+    <h2>Näin verkko toimii</h2>
+    <div class="help-cols">
+      <div>
+        <h4>Tavoite</h4>
+        <p>Liitä kaupunkeja verkkoosi johdoilla ja rakenna voimaloita. Jokainen toimitettu megawattitunti tuo rahaa, toimittamatta jäänyt maksaa korvauksia.</p>
+        <h4>Taajuus</h4>
+        <p>Tuotannon ja kulutuksen pitää olla tasan joka hetki. Jos voimala laukeaa, taajuus putoaa sitä nopeammin, mitä vähemmän verkossa on <b>hitausmassaa</b> (pyöriviä generaattoreita). <b>Taajuusreservi</b> (vesivoima, kaasuturbiinit, akut) paikkaa vajeen sekunneissa. Alle 48,8 Hz:n automatiikka irrottaa kuormaa, alle 47,5 Hz:n verkko romahtaa.</p>
+        <h4>Tuuli ja aurinko</h4>
+        <p>Tuottavat ilmaiseksi todellisen sään mukaan, mutta niissä ei ole hitausmassaa eikä reserviä.</p>
+      </div>
+      <div>
+        <h4>Johdot</h4>
+        <p>Teho jakautuu johtojen kesken fysiikan mukaan (DC-tehonjako) – et voi päättää, mitä reittiä se kulkee. Ylikuormittunut johto laukeaa, ja kuorma siirtyy muille.</p>
+        <h4>N-1</h4>
+        <p>Hyvä verkko kestää minkä tahansa yhden johdon tai voimalan menetyksen. N-1-välilehti kertoo, mitkä viat kaatuisivat verkkosi juuri nyt.</p>
+        <h4>Ohjaus</h4>
+        <p><b>Välilyönti</b> tauko · <b>1–6</b> nopeus · <b>hiiren rulla</b> zoomaus · <b>vedä</b> siirrä karttaa · <b>Esc</b> peru.</p>
+        <p class="muted small" id="attribution"></p>
+      </div>
+    </div>
+    <form method="dialog"><button class="btn primary">Selvä</button></form>
+  </dialog>
+
+  <dialog id="dlg-menu" class="dlg">
+    <h2>Valikko</h2>
+    <div class="menu-list">
+      <button class="btn" id="m-export">Vie tallennus leikepöydälle</button>
+      <button class="btn" id="m-import">Tuo tallennus</button>
+      <button class="btn danger" id="m-new">Aloita uusi peli</button>
+    </div>
+    <form method="dialog"><button class="btn primary">Sulje</button></form>
+  </dialog>
+
+  <dialog id="dlg-trace" class="dlg">
+    <h2 id="trace-title">Taajuushäiriö</h2>
+    <canvas id="trace-chart" width="520" height="220"></canvas>
+    <p id="trace-text" class="muted"></p>
+    <form method="dialog"><button class="btn primary">Sulje</button></form>
+  </dialog>
+
+  <div class="loading" id="loading">Ladataan todellista kulutus- ja säädataa…</div>
+
+  <script>
+    for (const src of ["js/tech.js", "js/data.js", "js/network.js", "js/sim.js", "js/ui.js", "js/main.js"]) {
+      const s = document.createElement("script");
+      s.src = src + "?v=" + Date.now();
+      s.async = false;
+      document.body.appendChild(s);
+    }
+  </script>
+</body>
+</html>
