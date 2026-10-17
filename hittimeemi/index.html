@@ -23,6 +23,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="/ads/ads.css">
 </head>
 <body>
   <a class="home-link" href="../">← Kaikki pelit</a>
@@ -50,6 +51,8 @@
     <div class="layout">
     <div class="col-guesses">
       <ol id="board"></ol>
+      <!-- Mainos jostain toisesta sivuston pelistä (ei koskaan tästä) -->
+      <div class="cross-ad" data-game="hittimeemi" hidden></div>
     </div>
 
     <div class="col-play">
@@ -89,6 +92,15 @@
       <p id="message" role="status"></p>
     </section>
 
+    <section id="yt-help" class="card" hidden>
+      <h3>YouTube ei toista videota</h3>
+      <p>YouTube saattaa epäillä yhteyttäsi botiksi ja vaatia kirjautumisen. Kirjaudu YouTubeen tässä selaimessa, palaa tälle välilehdelle ja yritä uudelleen. Jos video ei silti toimi, sen omistaja on todennäköisesti estänyt upottamisen.</p>
+      <div class="actions">
+        <a class="btn" href="https://accounts.google.com/ServiceLogin?service=youtube&amp;continue=https%3A%2F%2Fwww.youtube.com%2F" target="_blank" rel="noopener">Kirjaudu YouTubeen ↗</a>
+        <button id="yt-retry" class="btn primary">Yritä uudelleen</button>
+      </div>
+    </section>
+
     <section id="result" class="card" hidden>
       <div id="result-emoji"></div>
       <h2 id="result-title"></h2>
@@ -122,7 +134,7 @@
   <script>
     // Ladataan aina tuorein versio: GitHub Pages antaa selaimen pitää tiedostoja
     // välimuistissa 10 min, jolloin poistetut meemit näkyisivät vielä.
-    for (const src of ["memes.js", "game.js"]) {
+    for (const src of ["memes.js", "game.js", "/ads/games.js", "/ads/ads.js"]) {
       const s = document.createElement("script");
       s.src = src + "?v=" + Date.now();
       s.async = false; // säilyttää järjestyksen: memes.js ennen game.js:ää

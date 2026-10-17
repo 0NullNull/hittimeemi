@@ -30,16 +30,8 @@
     <p>Pieniä, hölmöjä ja hauskoja nettipelejä.</p>
   </header>
 
-  <main class="games">
-    <!-- Uusi peli: kopioi tämä <a>-lohko, vaihda linkki, kuva, nimi ja kuvaus -->
-    <a class="game" href="hittimeemi/">
-      <img src="hittimeemi/og-image.png" alt="" loading="lazy">
-      <div class="info">
-        <h2>Hittimeemi</h2>
-        <p>Tunnistatko suomimeemin puolessa sekunnissa?</p>
-      </div>
-    </a>
-
+  <!-- Pelikortit tulevat tiedostosta ads/games.js — uusi peli lisätään sinne -->
+  <main class="games" id="games">
     <div class="game soon">
       <div class="placeholder">🎲</div>
       <div class="info">
@@ -50,5 +42,23 @@
   </main>
 
   <footer>Tekijä: <a href="https://www.kuirinlahti.dev">kuirinlahti.dev</a></footer>
+
+  <script>
+    // Ladataan pelilista aina tuoreena (ks. välimuistihuomio hittimeemi/index.html:ssä)
+    const list = document.createElement("script");
+    list.src = "ads/games.js?v=" + Date.now();
+    list.onload = () => {
+      const soon = document.querySelector("#games .soon");
+      for (const g of window.GAMES || []) {
+        const a = document.createElement("a");
+        a.className = "game";
+        a.href = g.url.replace(/^\//, ""); // suhteellinen, toimii myös paikallisesti
+        a.innerHTML = `<img src="${g.ad.replace(/^\//, "")}" alt="" loading="lazy">
+          <div class="info"><h2>${g.title}</h2><p>${g.tagline}</p></div>`;
+        soon.before(a);
+      }
+    };
+    document.body.appendChild(list);
+  </script>
 </body>
 </html>

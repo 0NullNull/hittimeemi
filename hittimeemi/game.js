@@ -123,6 +123,7 @@
   function newGame(forceNew = false) {
     stopAudio();
     $("message").textContent = "";
+    $("yt-help").hidden = true;
     $("guess").value = "";
     hideSuggestions();
 
@@ -264,8 +265,9 @@
       2: "Virheellinen YouTube-linkki",
       5: "Videota ei voi toistaa selaimessa",
       100: "Videota ei löytynyt (poistettu tai yksityinen)",
-      101: "Videon omistaja ei salli upottamista",
-      150: "Videon omistaja ei salli upottamista",
+      // YouTube käyttää samaa koodia myös silloin, kun se epäilee yhteyttä botiksi
+      101: "YouTube ei toista tätä videota",
+      150: "YouTube ei toista tätä videota",
       153: "YouTube vaatii palvelimen: käynnistä peli start.bat-tiedostolla",
     };
 
@@ -290,6 +292,8 @@
                 stopAudio();
                 // Näytetään video-id eikä nimeä, ettei vastaus paljastu
                 $("message").textContent = `${ERRORS[e.data] || "YouTube-virhe " + e.data} (video ${current.videoId})`;
+                // 101/150: joko upotus estetty tai YouTube vaatii kirjautumisen → tarjotaan korjausnapit
+                if (e.data === 101 || e.data === 150) $("yt-help").hidden = false;
               },
             },
           });
@@ -553,6 +557,8 @@
   $("submit").addEventListener("click", submitGuess);
   $("skip").addEventListener("click", skip);
   $("next").addEventListener("click", () => newGame(true));
+  // Kierroksen tila on tallessa, joten sivun uudelleenlataus jatkaa samasta kohdasta
+  $("yt-retry").addEventListener("click", () => location.reload());
   $("share").addEventListener("click", share);
 
   // ---------- Äänenvoimakkuus ----------

@@ -15,8 +15,9 @@ Double-click `start.bat`. It starts a small local server (built into Windows, no
 1. Make a folder, e.g. `my-game/`, with its own `index.html`. Use relative paths (`style.css`, not `/style.css`) so it works both locally and online.
 2. Add a `← Kaikki pelit` link to `../` at the top, like Hittimeemi has.
 3. Give it an `og-image.png` (1200×630) and `og:` meta tags so links look good on Discord.
-4. Add a card for it on the homepage: copy the `<a class="game">` block in `index.html`.
-5. If the game saves anything in `localStorage`, prefix the keys (Hittimeemi uses `hm-`). All games share one domain, so they share storage.
+4. Register it in [`ads/games.js`](ads/games.js) and put its ad image (1200×630) in `ads/`. That one entry adds its card to the homepage and its ad to every other game.
+5. Add an ad slot to the new game so it promotes the others: include `/ads/ads.css`, `/ads/games.js` and `/ads/ads.js`, and put `<div class="cross-ad" data-game="my-game" hidden></div>` where the ad should go. The slot never shows the game's own ad, and removes itself if there's nothing else to show.
+6. If the game saves anything in `localStorage`, prefix the keys (Hittimeemi uses `hm-`). All games share one domain, so they share storage.
 
 ## Hittimeemi
 
