@@ -1,0 +1,75 @@
+:root {
+  --bg: #0b0d17;
+  --surface: #151829;
+  --surface-2: #1c2036;
+  --border: #272c47;
+  --text: #f1f3fb;
+  --muted: #8b91ad;
+  --accent: #3d7bff;
+  --accent-2: #6aa8ff;
+  --display: "Bricolage Grotesque", system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--text);
+  font: 15px/1.5 Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+  background:
+    radial-gradient(1000px 520px at 50% -200px, rgba(61, 123, 255, 0.3), transparent 70%),
+    var(--bg);
+  background-attachment: fixed;
+}
+
+header { max-width: 1120px; margin: 0 auto; padding: 80px 24px 40px; text-align: center; }
+h1 { margin: 0; font: 800 clamp(2rem, 6vw, 3.4rem)/1.05 var(--display); letter-spacing: -0.03em; }
+header p { margin: 12px 0 0; color: var(--muted); font-size: 1.05rem; }
+
+.games {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 24px 64px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 340px);
+  justify-content: center;
+  gap: 24px;
+}
+
+.game {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: inherit;
+  text-decoration: none;
+  transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+a.game:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent);
+  box-shadow: 0 12px 32px rgba(61, 123, 255, 0.2);
+}
+a.game:focus-visible { outline: 2px solid var(--accent-2); outline-offset: 3px; }
+
+.game img, .game .placeholder {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1200 / 630;
+  object-fit: cover;
+  background: var(--surface-2);
+}
+.game .placeholder { display: grid; place-items: center; font-size: 2.6rem; opacity: 0.6; }
+
+.info { padding: 14px 16px 16px; }
+.info h2 { margin: 0; font: 700 1.2rem/1.2 var(--display); }
+.info p { margin: 4px 0 0; color: var(--muted); font-size: 0.9rem; }
+
+.game.soon { border-style: dashed; background: rgba(21, 24, 41, 0.5); }
+
+footer { padding: 0 16px 32px; text-align: center; color: var(--muted); font-size: 0.85rem; }
+footer a { color: var(--accent-2); text-decoration: none; }
+footer a:hover { text-decoration: underline; }

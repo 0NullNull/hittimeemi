@@ -21,9 +21,19 @@ while ($listener.IsListening) {
   $ctx = $listener.GetContext()
   $res = $ctx.Response
   try {
-    $rel = [Uri]::UnescapeDataString($ctx.Request.Url.AbsolutePath.TrimStart('/'))
-    if ($rel -eq '') { $rel = 'index.html' }
+    $path = $ctx.Request.Url.AbsolutePath
+    $rel = [Uri]::UnescapeDataString($path.TrimStart('/'))
     $file = [IO.Path]::GetFullPath((Join-Path $root $rel))
+
+    # Folders: /hittimeemi -> redirect to /hittimeemi/, which serves its index.html (like GitHub Pages)
+    if ($file.StartsWith($root) -and (Test-Path -LiteralPath $file -PathType Container)) {
+      if (-not $path.EndsWith('/')) {
+        $res.StatusCode = 301
+        $res.AddHeader("Location", "$path/")
+        continue
+      }
+      $file = Join-Path $file 'index.html'
+    }
 
     if (-not $file.StartsWith($root) -or -not (Test-Path -LiteralPath $file -PathType Leaf)) {
       $res.StatusCode = 404
