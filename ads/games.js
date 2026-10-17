@@ -13,4 +13,11 @@ window.GAMES = [
     url: "/hittimeemi/",
     ad: "/ads/hittimeemi.png",
   },
+  {
+    id: "golf",
+    title: "Päivän rata",
+    tagline: "Uusi minigolfrata ja erikoissääntö joka päivä.",
+    url: "/golf/",
+    ad: "/ads/golf.png",
+  },
 ];

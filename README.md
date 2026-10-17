@@ -5,6 +5,7 @@ A collection of small browser games, in the style of neal.fun. Each game lives i
 | Game | Folder |
 |---|---|
 | Hittimeemi: guess the Finnish meme from a 0.5 s clip | [`hittimeemi/`](hittimeemi/) |
+| Päivän rata: daily 3-hole minigolf with a physics modifier | [`golf/`](golf/) |
 
 ## Running locally
 
@@ -44,6 +45,14 @@ Age-restricted videos and videos with embedding disabled won't play.
 - Clip lengths: `STEPS` at the top of `hittimeemi/game.js`.
 - The daily meme comes from the date and the length of the meme list, so adding or removing memes changes which meme is "today's".
 - Free play goes through every meme once before repeating, and the counter shows how many are left.
+
+## Päivän rata
+
+Every day has a 3-hole course and one modifier (ice, wind, bouncy walls, magnetic hole, heavy ball, tiny hole, or a normal day). Holes have sand, water, boost pads, portals, bumpers and moving walls.
+
+- **Hand-made courses:** add a date to [`golf/holes.js`](golf/holes.js). The file explains the format, and an example sits under `2026-01-01`. A hand-made course always wins over a generated one for that date.
+- **Generated courses:** otherwise the course is built from the date, so everyone gets the same one. A solver simulates thousands of shots to check each hole can be finished in 3 or fewer, and sets par to that number + 1.
+- Physics is in `golf/physics.js` and shared by the game and the solver, so a hole that passes the check plays the same way for players.
 
 ## Hosting
 
