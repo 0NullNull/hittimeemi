@@ -62,4 +62,15 @@ window.MEMES = [
   // ---------- Muut ----------
   { title: "Do you know da wae", aliases: ["Ugandan Knuckles", "Do you know the way", "Da wae"], youtube: "https://youtu.be/P31z2qbErpc" },
   { title: "Jari sinut pittää nyt tappaa", aliases: ["Jari", "Jari sinut pitää nyt tappaa"], youtube: "https://www.youtube.com/watch?v=32_wX1eDe_M" },
+
+  // Urheilu (2019–2022)
+  { title: "Löikö Mörkö sisään?", aliases: ["Mörkö", "Marko Anttila", "Mörkö löi sisään"], youtube: "https://youtu.be/LhOhTyxDmcI?t=4" }, // DJ ILG:n biisi Mertarannan huudon ympärille – alkuperäistä selostusta en löytänyt
+
+  // ---------- UUDET EHDOTUKSET: "Classic Finnish Memes With English Subs" osien 2 ja 3 lähdevideot ----------
+  { title: "Marcus Grönholm – Up in the ass of Timo", aliases: ["Marcus Grönholm", "Grönholm", "Up in the ass of Timo", "Rally English"], youtube: "https://youtu.be/3pTp1Pr3TNQ?t=24" },
+  { title: "Pekka Pouta – Winter is coming", aliases: ["Winter is coming", "Pouta winter is coming"], youtube: "https://youtu.be/8sS7-CfPn6Q?t=6" },
+  { title: "Pekka Poudan pallit lepattivat", aliases: ["Pallit lepattivat", "Pouta pallit"], youtube: "https://youtu.be/hgYL4EbCrfA?t=87" },
+  { title: "Hieno Koru Hermanni", aliases: ["Koru Hermanni", "Hieno koru"], youtube: "https://youtu.be/YGvq2AqxOSc" },
+  { title: "Mä oon pannu mu serkkuu", aliases: ["Pannu mu serkkuu", "Mä oon pannu mun serkkua"], youtube: "https://youtu.be/SMExnvWarGo" },
+  { title: "Kauppareissu", youtube: "https://www.youtube.com/watch?v=vYKv75qee3w" },
 ];

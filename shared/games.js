@@ -16,18 +16,4 @@ window.GAMES = [
     url: "/hittimeemi/",
     image: "/shared/thumbs/hittimeemi.png",
   },
-  {
-    id: "golf",
-    title: "Päivän rata",
-    tagline: "Uusi minigolfrata ja erikoissääntö joka päivä.",
-    url: "/golf/",
-    image: "/shared/thumbs/golf.png",
-  },
-  {
-    id: "grid",
-    title: "50 Hz",
-    tagline: "Rakenna Suomen sähköverkko. Pidä taajuus 50 hertsissä.",
-    url: "/grid/",
-    image: "/shared/thumbs/grid.png",
-  },
 ];
