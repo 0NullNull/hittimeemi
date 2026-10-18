@@ -221,9 +221,9 @@
       if (s.totals[me]) {
         if (Account.user) parts.push(el("div", "small", "Tulos tallennettiin tulostauluun."));
         else {
-          const signIn = el("button", "link", "Kirjaudu, niin seuraavat tuloksesi tallentuvat tulostauluun");
-          signIn.onclick = () => Account.open();
-          parts.push(signIn);
+          const signUp = el("button", "link", "Luo tili, niin seuraavat tuloksesi tallentuvat tulostauluun");
+          signUp.onclick = () => Account.open("signup");
+          parts.push(signUp);
         }
       }
       parts.push(net.isHost ? startButton("Uusi peli") : el("div", "small", `${hostName} voi aloittaa uuden pelin.`));
@@ -310,9 +310,11 @@
     $("board-total").replaceChildren(...rows(data.total));
     const mine = data.me;
     if (!Account.user) {
-      const signIn = el("button", "link", "Kirjaudu");
-      signIn.onclick = () => Account.open();
-      $("board-me").replaceChildren(signIn, ", niin tuloksesi tallentuvat tulostauluun.");
+      const signUp = el("button", "link", "Luo tili");
+      signUp.onclick = () => Account.open("signup");
+      const signIn = el("button", "link", "kirjaudu");
+      signIn.onclick = () => Account.open("login");
+      $("board-me").replaceChildren(signUp, " tai ", signIn, ", niin tuloksesi tallentuvat tulostauluun.");
     } else if (mine?.games) {
       $("board-me").replaceChildren(
         `Omat ennätyksesi: nopein reaktio ${mine.best != null ? ms(mine.best) : "–"}, ` +
