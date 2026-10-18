@@ -25,6 +25,8 @@ Double-click `start.bat`. It starts a small local server (built into Windows, no
 
 Multiplayer games connect to a game server at `wss://fun-api.kuirinlahti.dev` through [`shared/net.js`](shared/net.js): rooms with 4-letter codes, a host, and rejoining after a page reload. The comment at the top of that file shows how a game page uses it.
 
+The same server keeps **accounts** (a nickname plus recovery code, no passwords) and leaderboards. [`shared/account.js`](shared/account.js) adds the sign-in button to the top-right corner of a page. Load it after `net.js`, and include `/shared/account.css`. Games use `Account.user`, `Account.onChange()` and `Account.api()`; Reaktio's leaderboard is an example.
+
 The server itself lives in a separate private repo, cloned into `server/` here (this repo's `.gitignore` keeps it out). [`dev/lobby-test/`](dev/lobby-test/) is a test page for the connection: open it in two windows, create a room in one and join from the other. Opened from localhost, it uses a server running on this PC.
 
 ## Hittimeemi

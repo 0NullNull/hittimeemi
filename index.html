@@ -23,6 +23,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="shared/account.css">
 </head>
 <body>
   <header>
@@ -59,6 +60,14 @@
       }
     };
     document.body.appendChild(list);
+
+    // Kirjautumisnappi oikeaan yläkulmaan (account.js tarvitsee net.js:n)
+    for (const src of ["shared/net.js", "shared/account.js"]) {
+      const s = document.createElement("script");
+      s.src = src + "?v=" + Date.now();
+      s.async = false;
+      document.body.appendChild(s);
+    }
   </script>
 </body>
 </html>

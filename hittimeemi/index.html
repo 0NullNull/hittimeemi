@@ -24,6 +24,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="/shared/more-games.css">
+  <link rel="stylesheet" href="/shared/account.css">
 </head>
 <body data-game="hittimeemi">
   <a class="home-link" href="../">← Kaikki pelit</a>
@@ -132,7 +133,7 @@
   <script>
     // Ladataan aina tuorein versio: GitHub Pages antaa selaimen pitää tiedostoja
     // välimuistissa 10 min, jolloin poistetut meemit näkyisivät vielä.
-    for (const src of ["memes.js", "game.js", "/shared/games.js", "/shared/more-games.js"]) {
+    for (const src of ["memes.js", "game.js", "/shared/games.js", "/shared/more-games.js", "/shared/net.js", "/shared/account.js"]) {
       const s = document.createElement("script");
       s.src = src + "?v=" + Date.now();
       s.async = false; // säilyttää järjestyksen: memes.js ennen game.js:ää

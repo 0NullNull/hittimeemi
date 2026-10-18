@@ -37,8 +37,10 @@
       if (net.status === "online") $("status-text").textContent = `Yhteys toimii · ${v} ms`;
     },
     room(r) {
-      if (!r) state = null;
-      if (r) {
+      if (!r) {
+        state = null;
+        loadBoard(); // takaisin aloitusnäkymään: tuoreet tulokset
+      } else {
         $("error").textContent = "";
         // kutsulinkin koodi pois osoitteesta, jotta uudelleenlataus ei liity uudestaan
         if (params.has("room")) {
@@ -55,8 +57,10 @@
         goAt = performance.now();
         requestAnimationFrame(() => (goAt = performance.now())); // vihreä piirtyy tämän jälkeen
       }
+      const ended = m.phase === "end" && state?.phase !== "end";
       state = m;
       render();
+      if (ended) loadBoard(); // palvelin tallensi juuri kirjautuneiden tulokset
     },
     error(e) {
       $("error").textContent = e.message;
@@ -214,6 +218,14 @@
         parts.push(el("div", "big", winnerId === String(me) ? "Voitit!" : winner ? `${winner.name} voitti!` : "Peli päättyi"));
         parts.push(resultsList(s, me, true));
       }
+      if (s.totals[me]) {
+        if (Account.user) parts.push(el("div", "small", "Tulos tallennettiin tulostauluun."));
+        else {
+          const signIn = el("button", "link", "Kirjaudu, niin seuraavat tuloksesi tallentuvat tulostauluun");
+          signIn.onclick = () => Account.open();
+          parts.push(signIn);
+        }
+      }
       parts.push(net.isHost ? startButton("Uusi peli") : el("div", "small", `${hostName} voi aloittaa uuden pelin.`));
     }
 
@@ -228,6 +240,7 @@
   if (invited) $("code").value = invited;
 
   function name() {
+    if (Account.user) return Account.user.name; // palvelin käyttää tilin nimeä joka tapauksessa
     const n = $("name").value.trim();
     if (!n) {
       $("error").textContent = "Anna ensin nimi.";
@@ -271,6 +284,53 @@
     }
     setTimeout(() => ($("invite").textContent = "Kopioi kutsulinkki"), 1500);
   };
+
+  // ---------- tulostaulu ja kirjautuminen ----------
+
+  async function loadBoard() {
+    let data;
+    try {
+      data = await Account.api("GET", "/api/reaktio/leaderboard");
+    } catch {
+      $("board-best").replaceChildren(el("li", "empty", "Tulostaulu ei ole nyt saatavilla."));
+      $("board-total").replaceChildren();
+      $("board-me").replaceChildren();
+      return;
+    }
+    const rows = (list) =>
+      list.length
+        ? list.map((row, i) => {
+            const li = el("li");
+            li.classList.toggle("me", row.name === Account.user?.name);
+            li.append(el("span", "", `${i + 1}. ${row.name}`), el("span", "", ms(row.ms)));
+            return li;
+          })
+        : [el("li", "empty", "Ei vielä tuloksia.")];
+    $("board-best").replaceChildren(...rows(data.best));
+    $("board-total").replaceChildren(...rows(data.total));
+    const mine = data.me;
+    if (!Account.user) {
+      const signIn = el("button", "link", "Kirjaudu");
+      signIn.onclick = () => Account.open();
+      $("board-me").replaceChildren(signIn, ", niin tuloksesi tallentuvat tulostauluun.");
+    } else if (mine?.games) {
+      $("board-me").replaceChildren(
+        `Omat ennätyksesi: nopein reaktio ${mine.best != null ? ms(mine.best) : "–"}, ` +
+          `paras yhteisaika ${ms(mine.total)} (${mine.games} ${mine.games === 1 ? "peli" : "peliä"}).`,
+      );
+    } else {
+      $("board-me").replaceChildren("Pelaa peli, niin tuloksesi näkyvät täällä.");
+    }
+  }
+
+  // Kirjautuneena nimi tulee tililtä; vieras kirjoittaa sen itse
+  Account.onChange((user) => {
+    $("name").readOnly = !!user;
+    $("name-label").textContent = user ? "Pelaat nimimerkilläsi" : "Nimesi";
+    $("name").value = user ? user.name : store.get("rk-name");
+    loadBoard();
+    render();
+  });
 
   // Kutsulinkillä tullut, jonka nimi on jo tiedossa, pääsee suoraan huoneeseen
   if (invited && $("name").value.trim()) net.join(invited, $("name").value.trim());

@@ -80,6 +80,23 @@ input[type="text"]:focus { outline: 2px solid var(--accent-2); outline-offset: 1
 
 .join { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 .hint { grid-column: 1 / -1; margin: 0; text-align: center; color: var(--muted); }
+input[readonly] { opacity: 0.75; }
+
+/* ---------- tulostaulu ---------- */
+.board { grid-column: 1 / -1; }
+.board-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.board h3 { margin: 0 0 8px; font-size: 0.95rem; font-weight: 600; color: var(--muted); }
+.board-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.board-list li {
+  display: flex; justify-content: space-between; gap: 12px;
+  padding: 6px 12px; border-radius: 8px; background: var(--surface-2); font-variant-numeric: tabular-nums;
+}
+.board-list li span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.board-list li.me { outline: 1px solid var(--accent); }
+.board-list li.empty { background: none; padding-left: 0; color: var(--muted); }
+.board-me { margin: 14px 0 0; color: var(--muted); }
+.link { padding: 0; border: none; background: none; color: var(--accent-2); font: inherit; text-decoration: underline; cursor: pointer; }
+.pad .link { margin-top: 12px; color: inherit; }
 
 .layout { display: grid; grid-template-columns: 1fr 300px; gap: 24px; align-items: start; }
 
@@ -141,6 +158,6 @@ kbd { padding: 1px 6px; border: 1px solid var(--border); border-radius: 6px; bac
 
 @media (max-width: 820px) {
   header { padding-top: 56px; flex-wrap: wrap; }
-  .join, .layout { grid-template-columns: 1fr; }
+  .join, .layout, .board-cols { grid-template-columns: 1fr; }
   .pad { height: 340px; }
 }

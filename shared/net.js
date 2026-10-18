@@ -10,8 +10,9 @@
 //   net.create("Nimi"); net.join("ABCD", "Nimi"); net.send({ ... }); net.leave();
 //   net.room, net.me, net.isHost, net.status, net.latency
 //
-// Katkos tai sivun uudelleenlataus vie takaisin samaan huoneeseen. Sivu yhdistää
-// localhostilla tämän koneen palvelimeen, muuten wss://fun-api.kuirinlahti.dev.
+// Katkos tai sivun uudelleenlataus vie takaisin samaan huoneeseen. Kirjautunut pelaaja
+// (shared/account.js) tunnistetaan automaattisesti, ja hänen tuloksensa tallentuvat.
+// Sivu yhdistää localhostilla tämän koneen palvelimeen, muuten wss://fun-api.kuirinlahti.dev.
 // Osoitteen perään ?server=live tai ?server=local pakottaa jommankumman.
 (() => {
   const LIVE = "wss://fun-api.kuirinlahti.dev/ws";
@@ -23,6 +24,13 @@
     if (pick === "local") return LOCAL;
     return ["localhost", "127.0.0.1"].includes(location.hostname) ? LOCAL : LIVE;
   }
+  // Saman palvelimen HTTP-osoite (tilit ja tulostaulut), esim. https://fun-api.kuirinlahti.dev
+  const httpUrl = () => serverUrl().replace(/^ws/, "http").replace(/\/ws$/, "");
+
+  // Kirjautumistoken (shared/account.js tallentaa sen); yhteinen kaikille sivuston peleille
+  const sessionToken = () => {
+    try { return localStorage.getItem("fun-session"); } catch { return null; }
+  };
 
   // sessionStorage on välilehtikohtainen: uusi välilehti on uusi pelaaja
   const store = {
@@ -69,6 +77,8 @@
       ws.onopen = () => {
         retries = 0;
         setStatus("online");
+        const session = sessionToken();
+        if (session) raw({ t: "auth", token: session }); // ennen huonekomentoja
         const token = store.get(key);
         if (token) raw({ t: "resume", token });
         if (pending) raw(pending);
@@ -103,6 +113,10 @@
         case "players":
           if (room) setRoom(lobby(msg, room.you));
           return;
+        case "left": // palvelin poisti huoneesta (esim. ylläpito sulki huoneen)
+          store.set(key, null);
+          if (room) setRoom(null);
+          return;
         case "game":
           return emit("message", msg.data);
         case "pong":
@@ -120,6 +134,9 @@
     const command = (msg) => {
       if (!raw(msg)) pending = msg;
     };
+
+    // Kirjautuminen tai uloskirjautuminen kesken kaiken: kerrotaan palvelimelle heti
+    addEventListener("fun-account", () => raw({ t: "auth", token: sessionToken() }));
 
     // avataan vasta, kun kutsuja on saanut net-olion talteen
     queueMicrotask(open);
@@ -148,5 +165,5 @@
     };
   }
 
-  window.Net = { connect, serverUrl };
+  window.Net = { connect, serverUrl, httpUrl };
 })();

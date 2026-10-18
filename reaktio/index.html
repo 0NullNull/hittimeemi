@@ -24,6 +24,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="/shared/more-games.css">
+  <link rel="stylesheet" href="/shared/account.css">
 </head>
 <body data-game="reaktio">
   <a class="home-link" href="../">← Kaikki pelit</a>
@@ -39,7 +40,7 @@
     <section id="join" class="join">
       <div class="card">
         <h2>Uusi peli</h2>
-        <label for="name">Nimesi</label>
+        <label for="name" id="name-label">Nimesi</label>
         <input id="name" type="text" maxlength="20" autocomplete="off" spellcheck="false">
         <button id="create" class="btn primary">Luo huone</button>
       </div>
@@ -48,6 +49,20 @@
         <label for="code">Huoneen koodi</label>
         <input id="code" type="text" maxlength="4" placeholder="ABCD" autocomplete="off" spellcheck="false">
         <button id="join-btn" class="btn">Liity</button>
+      </div>
+      <div class="card board">
+        <h2>Tulostaulu</h2>
+        <div class="board-cols">
+          <div>
+            <h3>Nopein reaktio</h3>
+            <ol id="board-best" class="board-list"></ol>
+          </div>
+          <div>
+            <h3>Paras yhteisaika (5 kierrosta)</h3>
+            <ol id="board-total" class="board-list"></ol>
+          </div>
+        </div>
+        <p id="board-me" class="board-me"></p>
       </div>
       <p class="hint">Odota punaista ruutua, ja klikkaa heti kun se muuttuu vihreäksi. Viisi kierrosta, pienin yhteisaika voittaa. Voit pelata myös yksin.</p>
     </section>
@@ -72,7 +87,7 @@
   <script>
     // Ladataan aina tuorein versio: GitHub Pages antaa selaimen pitää tiedostoja
     // välimuistissa 10 min.
-    for (const src of ["/shared/net.js", "game.js", "/shared/games.js", "/shared/more-games.js"]) {
+    for (const src of ["/shared/net.js", "/shared/account.js", "game.js", "/shared/games.js", "/shared/more-games.js"]) {
       const s = document.createElement("script");
       s.src = src + "?v=" + Date.now();
       s.async = false; // säilyttää järjestyksen

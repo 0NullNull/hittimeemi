@@ -1,0 +1,59 @@
+/* Kirjautumisnappi oikeassa yläkulmassa ja tili-ikkuna (shared/account.js).
+   Värit tulevat sivun omista muuttujista, varavärit niiden puuttuessa. */
+.acct { position: absolute; top: 14px; right: 20px; z-index: 40; }
+
+.acct-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  max-width: 240px; padding: 7px 14px 7px 10px;
+  border-radius: 999px; border: 1px solid var(--border, #272c47);
+  background: var(--surface, #151829); color: var(--text, #f1f3fb);
+  font: 600 0.9rem Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+  cursor: pointer;
+}
+.acct-btn:hover { border-color: var(--accent-2, #6aa8ff); }
+.acct-btn svg { width: 18px; height: 18px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+.acct-btn span:not(.acct-dot) { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.acct-dot { width: 8px; height: 8px; flex: none; border-radius: 50%; background: #f59e0b; }
+
+.acct-dialog {
+  width: min(460px, calc(100vw - 32px)); padding: 28px 26px 22px;
+  border-radius: 16px; border: 1px solid var(--border, #272c47);
+  background: var(--surface, #151829); color: var(--text, #f1f3fb);
+  font: 15px/1.5 Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+.acct-dialog::backdrop { background: rgba(5, 6, 12, 0.65); }
+.acct-dialog h2 { margin: 0 0 6px; font: 700 1.35rem/1.2 "Bricolage Grotesque", system-ui, sans-serif; overflow-wrap: anywhere; }
+.acct-lead { margin: 0 0 18px; color: var(--muted, #8b91ad); }
+.acct-dialog label { display: block; margin: 0 0 6px; color: var(--muted, #8b91ad); font-size: 0.9rem; }
+.acct-row { display: flex; gap: 8px; }
+.acct-end { justify-content: flex-end; }
+.acct-dialog input {
+  flex: 1; min-width: 0; padding: 10px 12px; border-radius: 10px;
+  border: 1px solid var(--border, #272c47); background: var(--surface-2, #1c2036);
+  color: var(--text, #f1f3fb); font: inherit;
+}
+.acct-dialog input:focus { outline: 2px solid var(--accent-2, #6aa8ff); outline-offset: 1px; }
+.acct-dialog button {
+  padding: 10px 16px; border-radius: 10px; border: 1px solid var(--border, #272c47);
+  background: var(--surface-2, #1c2036); color: var(--text, #f1f3fb);
+  font: 600 0.92rem Inter, system-ui, sans-serif; cursor: pointer; white-space: nowrap;
+}
+.acct-dialog button:hover { border-color: var(--accent-2, #6aa8ff); }
+.acct-dialog button:disabled { opacity: 0.6; cursor: default; }
+.acct-dialog button.acct-primary { background: var(--accent, #3d7bff); border-color: var(--accent, #3d7bff); }
+.acct-dialog button.acct-danger:hover { border-color: #f87171; color: #f87171; }
+.acct-dialog .acct-close {
+  position: absolute; top: 8px; right: 8px; padding: 2px 10px;
+  border: none; background: transparent; color: var(--muted, #8b91ad); font-size: 1.4rem; font-weight: 400;
+}
+.acct-dialog .acct-close:hover { color: var(--text, #f1f3fb); }
+.acct-or { display: flex; align-items: center; gap: 12px; margin: 6px 0 14px; color: var(--muted, #8b91ad); font-size: 0.85rem; }
+.acct-or::before, .acct-or::after { content: ""; flex: 1; height: 1px; background: var(--border, #272c47); }
+.acct-code {
+  margin: 0 0 18px; padding: 16px; border-radius: 12px; text-align: center;
+  border: 1px dashed var(--accent-2, #6aa8ff); background: var(--surface-2, #1c2036);
+  font: 700 1.45rem/1.2 ui-monospace, Consolas, "Cascadia Mono", monospace; letter-spacing: 0.06em;
+  user-select: all;
+}
+.acct-actions { display: grid; gap: 8px; margin-top: 4px; }
+.acct-error { min-height: 1.4em; margin: 8px 0 0; color: #f87171; font-size: 0.9rem; }
