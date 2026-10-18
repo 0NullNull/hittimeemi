@@ -1,0 +1,5 @@
+# Claude Code: local skills and settings, only on this PC
+.claude/
+
+# Game server: its own private repo, cloned into this folder (see README)
+server/

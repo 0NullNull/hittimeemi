@@ -20,6 +20,12 @@ Double-click `start.bat`. It starts a small local server (built into Windows, no
    - Don't name files or classes with "ad"/"ads". Ad blockers hide them automatically (EasyList hides `.ad-label` and `.ad-cta` on every site).
 6. If the game saves anything in `localStorage`, prefix the keys (Hittimeemi uses `hm-`). All games share one domain, so they share storage.
 
+## Multiplayer
+
+Multiplayer games connect to a game server at `wss://fun-api.kuirinlahti.dev` through [`shared/net.js`](shared/net.js): rooms with 4-letter codes, a host, and rejoining after a page reload. The comment at the top of that file shows how a game page uses it.
+
+The server itself lives in a separate private repo, cloned into `server/` here (this repo's `.gitignore` keeps it out). [`dev/lobby-test/`](dev/lobby-test/) is a test page for the connection: open it in two windows, create a room in one and join from the other. Opened from localhost, it uses a server running on this PC.
+
 ## Hittimeemi
 
 Heardle-style: you hear 0.5 s of a clip, then 1 s, 2 s, 4 s, 8 s and 15 s. Each wrong guess or skip unlocks a longer clip.
