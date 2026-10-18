@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="fi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reaktio</title>
+  <meta name="description" content="Kuka teistä on nopein? Reaktiokisa kavereiden kanssa.">
+
+  <!-- Linkin esikatselu Discordissa, WhatsAppissa, X:ssä jne. -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Reaktio">
+  <meta property="og:title" content="Reaktio – kuka on nopein?">
+  <meta property="og:description" content="Kuka teistä on nopein? Reaktiokisa kavereiden kanssa.">
+  <meta property="og:url" content="https://fun.kuirinlahti.dev/reaktio/">
+  <meta property="og:image" content="https://fun.kuirinlahti.dev/reaktio/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#2f80ed">
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2322c55e'/%3E%3Cpath d='M18 4 8 18h7l-2 10 10-14h-7z' fill='white'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="/shared/more-games.css">
+</head>
+<body data-game="reaktio">
+  <a class="home-link" href="../">← Kaikki pelit</a>
+  <header>
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8"/><path d="M18 4 8 18h7l-2 10 10-14h-7z"/></svg>
+      <h1>Reaktio</h1>
+    </div>
+    <span class="status"><span id="dot"></span><span id="status-text">Yhdistetään palvelimeen…</span></span>
+  </header>
+
+  <main>
+    <section id="join" class="join">
+      <div class="card">
+        <h2>Uusi peli</h2>
+        <label for="name">Nimesi</label>
+        <input id="name" type="text" maxlength="20" autocomplete="off" spellcheck="false">
+        <button id="create" class="btn primary">Luo huone</button>
+      </div>
+      <div class="card">
+        <h2>Liity kaverin peliin</h2>
+        <label for="code">Huoneen koodi</label>
+        <input id="code" type="text" maxlength="4" placeholder="ABCD" autocomplete="off" spellcheck="false">
+        <button id="join-btn" class="btn">Liity</button>
+      </div>
+      <p class="hint">Odota punaista ruutua, ja klikkaa heti kun se muuttuu vihreäksi. Viisi kierrosta, pienin yhteisaika voittaa. Voit pelata myös yksin.</p>
+    </section>
+
+    <section id="game" class="layout" hidden>
+      <div class="col-pad">
+        <div id="pad" class="pad idle" role="button" tabindex="0" aria-live="polite"></div>
+        <p class="help">Klikkaa ruutua tai paina <kbd>välilyöntiä</kbd> heti, kun ruutu muuttuu vihreäksi. Liian aikainen klikkaus tai myöhästyminen = <b>1 000 ms</b> sakko.</p>
+      </div>
+      <aside class="col-side card">
+        <span class="eyebrow">Huoneen koodi</span>
+        <strong id="room-code"></strong>
+        <button id="invite" class="btn">Kopioi kutsulinkki</button>
+        <ol id="players"></ol>
+        <button id="leave" class="btn ghost">Poistu huoneesta</button>
+      </aside>
+    </section>
+
+    <p id="error" role="alert"></p>
+  </main>
+
+  <script>
+    // Ladataan aina tuorein versio: GitHub Pages antaa selaimen pitää tiedostoja
+    // välimuistissa 10 min.
+    for (const src of ["/shared/net.js", "game.js", "/shared/games.js", "/shared/more-games.js"]) {
+      const s = document.createElement("script");
+      s.src = src + "?v=" + Date.now();
+      s.async = false; // säilyttää järjestyksen
+      document.body.appendChild(s);
+    }
+  </script>
+</body>
+</html>

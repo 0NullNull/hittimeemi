@@ -5,6 +5,7 @@ A collection of small browser games, in the style of neal.fun. Each game lives i
 | Game | Folder |
 |---|---|
 | Hittimeemi: guess the Finnish meme from a 0.5 s clip | [`hittimeemi/`](hittimeemi/) |
+| Reaktio: multiplayer reaction duel (test game for the game server) | [`reaktio/`](reaktio/) |
 
 ## Running locally
 

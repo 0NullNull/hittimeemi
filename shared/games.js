@@ -16,4 +16,11 @@ window.GAMES = [
     url: "/hittimeemi/",
     image: "/shared/thumbs/hittimeemi.png",
   },
+  {
+    id: "reaktio",
+    title: "Reaktio",
+    tagline: "Kuka teistä on nopein? Reaktiokisa kavereiden kanssa.",
+    url: "/reaktio/",
+    image: "/shared/thumbs/reaktio.png",
+  },
 ];
