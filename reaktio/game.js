@@ -95,7 +95,8 @@
     const r = net.room;
     $("join").hidden = !!r;
     $("game").hidden = !r;
-    for (const b of [$("create"), $("join-btn")]) b.disabled = net.status !== "online";
+    // yhdistäessä napit toimivat (net.js lähettää komennon heti kun yhteys aukeaa), vain katkoksella ei
+    for (const b of [$("create"), $("join-btn")]) b.disabled = net.status === "offline";
     if (!r) return;
     $("room-code").textContent = r.code;
     renderPlayers(r);
