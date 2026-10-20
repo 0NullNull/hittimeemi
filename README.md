@@ -37,26 +37,26 @@ The server itself lives in a separate private repo, cloned into `server/` here (
 
 Heardle-style: you hear 0.5 s of a clip, then 1 s, 2 s, 4 s, 8 s and 15 s. Each wrong guess or skip unlocks a longer clip.
 
-### Adding memes
+### Memes
 
-Edit `hittimeemi/memes.js`. One line per meme:
+The memes live in the game server's database. You manage them in the admin panel's **Hittimeemi** tab, at http://192.168.100.4:8790/#hittimeemi from home or over the VPN:
+- **Add and edit:** set the name, other accepted names (aliases), the YouTube link and an optional start time. There's a preview, and you can hide or delete memes.
+- **Checks on saving:** two memes can't share a name, and the same clip can't be added twice.
+- **Suggestions:** players suggest memes with the **Ehdota meemiä** button in the game, which needs an account. Suggestions wait in the tab's queue: *Lisää peliin…* fills the editor, *Hylkää* rejects.
+- **Import:** paste a JSON list or `memes.js`-style text, and it becomes suggestions to review.
 
-```js
-{ title: "Meemin nimi", aliases: ["muu nimi"], youtube: "https://youtu.be/XXXXXXXXXXX", start: "0:03.5" },
-```
+Field details:
+- **Name and aliases:** the name is the answer shown in the suggestion list. Aliases are other spellings that also count as correct.
+- **YouTube link:** a normal `youtube.com/watch?v=…`, `youtu.be/…` or `/shorts/…` link.
+- **Start time:** `12`, `12.5`, `1:05` or `1:05.3`. If empty, the link's `?t=` timestamp is used (YouTube's Share → "Start at"), otherwise 0.
+- **Videos that won't play:** age-restricted videos and videos with embedding disabled.
 
-- `title` is the answer shown in the suggestion list.
-- `aliases` are other spellings that also count as correct. Don't reuse an alias across memes.
-- `youtube` takes a normal link: `youtube.com/watch?v=…`, `youtu.be/…` or `/shorts/…`.
-- `start` is where the clip begins: `12`, `12.5`, `"1:05"` or `"1:05.3"`. If you leave it out, the link's `?t=` timestamp is used (YouTube's Share → "Start at"), otherwise 0.
-- Instead of `youtube` you can use `file: "audio/name.mp3"` for your own audio in `hittimeemi/audio/`.
-
-Age-restricted videos and videos with embedding disabled won't play.
+**`hittimeemi/memes.js` is now only a fallback.** The game loads the list from the server. If the server doesn't answer, it uses the list this browser saved last time, and failing that, `memes.js`. Editing the file doesn't change the game. Refresh it now and then with the admin panel's *Lataa memes.js (varalista)* and commit it.
 
 ### Tweaking
 
 - Clip lengths: `STEPS` at the top of `hittimeemi/game.js`.
-- The daily meme comes from the date and the length of the meme list, so adding or removing memes changes which meme is "today's".
+- **Daily meme:** the server picks one once per day (Finnish time) and saves it, so it's the same for everyone and editing the list doesn't change it. It picks memes that haven't been the daily meme yet, then the ones that waited longest. Only when the server is unreachable does the game fall back to working it out from the date.
 - Free play goes through every meme once before repeating, and the counter shows how many are left.
 
 ## Hosting

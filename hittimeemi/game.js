@@ -1,4 +1,4 @@
-(() => {
+(async () => {
   // Kuinka pitkä pätkä kuullaan kullakin yrityksellä (sekunteina)
   const STEPS = [0.5, 1, 2, 4, 8, 15];
   // Kuinka pitkään "Kuuntele pidempi pätkä" soittaa
@@ -6,7 +6,6 @@
   // Päivä, josta päivän meemien numerointi alkaa
   const EPOCH = Date.UTC(2026, 0, 1);
 
-  const MEMES = window.MEMES || [];
   const $ = (id) => document.getElementById(id);
   const fmt = (s) => s.toFixed(1).replace(".", ",") + " s";
   // Pätkän pituus ilman turhaa desimaalia: "0,5 s", "2 s"
@@ -22,6 +21,38 @@
       try { localStorage.setItem(key, JSON.stringify(value)); } catch {}
     },
   };
+
+  // ---------- Meemilista ----------
+  // Lista tulee pelipalvelimelta (ylläpitopaneelissa muokattava tietokanta). Jos palvelin ei
+  // vastaa, käytetään tämän selaimen viimeksi saamaa listaa ja sen puuttuessa sivuston mukana
+  // tulevaa memes.js-varalistaa, joten peli toimii aina.
+  const DAILY = {}; // "2026-10-20" → päivän meemin id (palvelin arpoo, sama kaikille)
+
+  async function loadMemes() {
+    $("message").textContent = "Ladataan meemejä…";
+    try {
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 3000);
+      const res = await fetch(Net.httpUrl() + "/api/hittimeemi/memes", { signal: ctrl.signal });
+      clearTimeout(timer);
+      const data = await res.json();
+      if (!res.ok || !data.memes?.length) throw new Error("tyhjä lista");
+      store.set("hm-memes-cache", data);
+      Object.assign(DAILY, data.daily);
+      return data.memes;
+    } catch {
+      const cached = store.get("hm-memes-cache", null);
+      if (cached?.memes?.length) {
+        Object.assign(DAILY, cached.daily);
+        return cached.memes;
+      }
+      return window.MEMES || [];
+    } finally {
+      $("message").textContent = "";
+    }
+  }
+
+  const MEMES = await loadMemes();
 
   // ---------- Meemilistan lukeminen ----------
 
@@ -85,6 +116,16 @@
     return order[((day % n) + n) % n];
   }
 
+  // Päivän numero → "2026-10-20" (paikallinen päivämäärä, kuten todayNumber)
+  const dateKey = (dayNumber) => new Date(EPOCH + dayNumber * 864e5).toISOString().slice(0, 10);
+
+  // Palvelimen arpoma päivän meemi; jos sitä ei ole (palvelin pois päältä), lasketaan itse
+  function dailyPick(dayNumber) {
+    const id = DAILY[dateKey(dayNumber)];
+    const index = id == null ? -1 : MEMES.findIndex((m) => m.id === id);
+    return index >= 0 ? index : dailyIndex(dayNumber);
+  }
+
   // ---------- Pelitila ----------
 
   let mode = "daily";
@@ -129,7 +170,7 @@
 
     if (mode === "daily") {
       day = todayNumber();
-      const index = dailyIndex(day);
+      const index = dailyPick(day);
       const saved = store.get("hm-daily", null);
       game = saved && saved.day === day && saved.title === MEMES[index].title
         ? { index, guesses: saved.guesses, done: saved.done, won: saved.won }
@@ -599,8 +640,56 @@
       newGame();
     }));
 
+  // ---------- Meemin ehdottaminen ----------
+  // Kirjautunut pelaaja voi ehdottaa uutta meemiä; ylläpito tarkistaa ehdotukset paneelissa.
+
+  function showSuggestForm() {
+    const signedIn = !!Account.user;
+    $("suggest-login").hidden = signedIn;
+    $("suggest-form").hidden = !signedIn;
+  }
+  Account.onChange(showSuggestForm);
+
+  $("suggest-btn").addEventListener("click", () => {
+    $("suggest-form").reset();
+    $("suggest-msg").textContent = "";
+    $("suggest-done").hidden = true;
+    showSuggestForm();
+    $("suggest").showModal();
+  });
+  $("suggest-signup").addEventListener("click", () => Account.open("signup"));
+  $("suggest-signin").addEventListener("click", () => Account.open("login"));
+  for (const id of ["suggest-cancel", "suggest-close"]) $(id).addEventListener("click", () => $("suggest").close());
+
+  $("suggest-form").addEventListener("input", () => ($("suggest-msg").textContent = ""));
+  $("suggest-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const value = (name) => form.elements.namedItem(name).value.trim();
+    const msg = $("suggest-msg");
+    const known = MEMES.find((m) => m.videoId && m.videoId === parseYouTube(value("youtube")).id);
+    if (known) {
+      msg.textContent = `Tämä video on jo pelissä: "${known.title}".`;
+      return;
+    }
+    const button = form.querySelector("button[type=submit]");
+    button.disabled = true;
+    msg.textContent = "";
+    try {
+      await Account.api("POST", "/api/hittimeemi/suggest", {
+        title: value("title"), youtube: value("youtube"), start: value("start"), note: value("note"),
+      });
+      $("suggest-form").hidden = true;
+      $("suggest-done").hidden = false;
+    } catch (err) {
+      msg.textContent = err.message;
+    } finally {
+      button.disabled = false;
+    }
+  });
+
   if (!MEMES.length) {
-    $("message").textContent = "Lisää meemejä tiedostoon memes.js.";
+    $("message").textContent = "Meemilistaa ei saatu ladattua. Yritä hetken päästä uudelleen.";
     return;
   }
   newGame();

@@ -1,12 +1,9 @@
-// Meemilista. Lisää uusi meemi kopioimalla rivi ja vaihtamalla tiedot.
-//   title   = oikea vastaus (näkyy ehdotuslistassa)
-//   aliases = muut kirjoitusasut, jotka hyväksytään oikeaksi (ei pakollinen)
-//             Älä käytä samaa aliasta kahdella meemillä (esim. "Kummeli"),
-//             muuten arvaus voi osua väärään meemiin.
-//   youtube = YouTube-linkki (youtube.com/watch?v=..., youtu.be/..., shorts/...)
-//   file    = TAI oma äänitiedosto audio-kansiossa (mp3, ogg, m4a, wav...)
-//   start   = mistä kohtaa pätkä alkaa: 12, 12.5, "1:05" tai "1:05.3" (ei pakollinen)
-//             Jos startia ei ole, käytetään linkin ?t=-aikaleimaa, muuten 0.
+// VARALISTA. Meemit ovat nykyään pelipalvelimen tietokannassa, ja niitä muokataan
+// ylläpitopaneelin Hittimeemi-välilehdellä. Tämän tiedoston muokkaaminen ei muuta peliä:
+// peli käyttää sitä vain, jos palvelin ei vastaa eikä selaimella ole tallessa aiempaa listaa.
+// Päivitä se silloin tällöin: ylläpitopaneeli → Hittimeemi → "Lataa memes.js (varalista)".
+//   title   = oikea vastaus · aliases = muut hyväksytyt nimet · youtube = linkki
+//   start   = mistä kohtaa pätkä alkaa (muuten linkin ?t= tai 0)
 window.MEMES = [
   { title: "Ui juma", aliases: ["Voi juma", "Avantouinti"], youtube: "https://youtu.be/nWm6apd6mp8?t=17" },
   { title: "Kahen kilon siika", aliases: ["Kahden kilon siika", "Siika", "Tuoppi"], youtube: "https://youtu.be/SlIw7GiHUkc?t=26" },
@@ -52,5 +49,5 @@ window.MEMES = [
   { title: "Pekka Poudan pallit lepattivat", aliases: ["Pallit lepattivat", "Pouta pallit"], youtube: "https://youtu.be/hgYL4EbCrfA?t=87" },
   { title: "Hieno Koru Hermanni", aliases: ["Koru Hermanni", "Hieno koru"], youtube: "https://youtu.be/YGvq2AqxOSc" },
   { title: "Mä oon pannu mu serkkuu", aliases: ["Pannu mu serkkuu", "Mä oon pannu mun serkkua"], youtube: "https://youtu.be/SMExnvWarGo" },
-  { title: "Kauppareissu", youtube: "https://www.youtube.com/watch?v=vYKv75qee3w" },
+  { title: "Kauppareissu", aliases: ["Mars jäätelöpatukka"], youtube: "https://www.youtube.com/watch?v=vYKv75qee3w" },
 ];

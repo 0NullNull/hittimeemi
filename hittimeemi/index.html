@@ -40,7 +40,10 @@
       <button data-mode="daily" class="active">Päivän meemi</button>
       <button data-mode="free">Vapaa pelaus</button>
     </nav>
-    <button id="help-btn" class="icon-btn" aria-label="Ohjeet">?</button>
+    <div class="header-actions">
+      <button id="suggest-btn" class="pill-btn" title="Puuttuuko jokin meemi? Ehdota sitä peliin.">＋ Ehdota meemiä</button>
+      <button id="help-btn" class="icon-btn" aria-label="Ohjeet">?</button>
+    </div>
   </header>
 
   <main>
@@ -127,13 +130,44 @@
       <li>Kirjoita arvaus ja valitse meemi listasta. Kuusi yritystä.</li>
     </ol>
     <p><b>Päivän meemi</b> on kaikille sama ja vaihtuu keskiyöllä. <b>Vapaalla pelauksella</b> voit pelata niin paljon kuin huvittaa.</p>
+    <p>Puuttuuko jokin meemi? Ehdota sitä yläkulman <b>Ehdota meemiä</b> -napista.</p>
     <form method="dialog"><button class="btn primary">Pelaamaan!</button></form>
+  </dialog>
+
+  <dialog id="suggest">
+    <h2>Ehdota meemiä</h2>
+    <p>Puuttuuko listalta jokin suomimeemi? Ehdota sitä, niin ylläpito tarkistaa sen ja lisää peliin.</p>
+    <div id="suggest-login" hidden>
+      <p>Ehdottaminen vaatii tilin, jotta roskapostia ei tule.</p>
+      <div class="actions">
+        <button type="button" class="btn primary" id="suggest-signup">Luo tili</button>
+        <button type="button" class="btn" id="suggest-signin">Kirjaudu</button>
+      </div>
+    </div>
+    <form id="suggest-form" class="suggest-form" hidden>
+      <label>Meemin nimi <input name="title" required maxlength="100" autocomplete="off" placeholder="esim. Kahen kilon siika"></label>
+      <label>YouTube-linkki <input name="youtube" type="url" required autocomplete="off" placeholder="https://youtu.be/…"></label>
+      <label>Mistä kohtaa pätkä alkaa? <small>valinnainen, esim. 0:12</small><input name="start" autocomplete="off"></label>
+      <label>Lisätietoja <small>valinnainen</small><textarea name="note" maxlength="500" rows="3"></textarea></label>
+      <p class="hint">Vinkki: YouTuben Jaa → "Aloita kohdasta" -linkissä alkukohta tulee mukana.</p>
+      <p id="suggest-msg" class="suggest-msg" role="alert"></p>
+      <div class="actions">
+        <button type="button" class="btn" id="suggest-cancel">Peruuta</button>
+        <button type="submit" class="btn primary">Lähetä ehdotus</button>
+      </div>
+    </form>
+    <div id="suggest-done" hidden>
+      <p><b>Kiitos ehdotuksesta!</b> Ylläpito tarkistaa sen, ja hyväksytty meemi tulee peliin.</p>
+      <div class="actions"><button type="button" class="btn primary" id="suggest-close">Sulje</button></div>
+    </div>
   </dialog>
 
   <script>
     // Ladataan aina tuorein versio: GitHub Pages antaa selaimen pitää tiedostoja
     // välimuistissa 10 min, jolloin poistetut meemit näkyisivät vielä.
-    for (const src of ["memes.js", "game.js", "/shared/games.js", "/shared/more-games.js", "/shared/net.js", "/shared/account.js"]) {
+    // memes.js on varalista; varsinainen lista tulee palvelimelta (game.js), joten net.js ja
+    // account.js ladataan ennen peliä
+    for (const src of ["memes.js", "/shared/net.js", "/shared/account.js", "game.js", "/shared/games.js", "/shared/more-games.js"]) {
       const s = document.createElement("script");
       s.src = src + "?v=" + Date.now();
       s.async = false; // säilyttää järjestyksen: memes.js ennen game.js:ää
