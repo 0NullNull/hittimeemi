@@ -26,17 +26,35 @@
   let offline = false;
   const listeners = [];
 
+  // Tallennus ensin: net.js lukee tokenin localStoragesta fun-account-tapahtumassa
   function setUser(nextUser, nextToken = token) {
+    const saved = nextUser ? { id: nextUser.id, name: nextUser.name } : null;
+    store.set(TOKEN_KEY, saved ? nextToken : null);
+    store.set(USER_KEY, saved ? JSON.stringify(saved) : null);
+    apply(nextUser, nextToken);
+  }
+
+  function apply(nextUser, nextToken) {
     user = nextUser ? { id: nextUser.id, name: nextUser.name } : null;
     token = user ? nextToken : null;
-    store.set(TOKEN_KEY, token);
-    store.set(USER_KEY, user ? JSON.stringify(user) : null);
     renderButton();
     for (const fn of listeners) {
       try { fn(user); } catch (err) { console.error(err); }
     }
     dispatchEvent(new CustomEvent("fun-account")); // net.js ja "Kokeile myös" -kortit päivittyvät
   }
+
+  // Kirjautuminen tai uloskirjautuminen toisessa välilehdessä (esim. toisessa pelissä):
+  // tämäkin välilehti seuraa heti, ja net.js kertoo muutoksen pelipalvelimelle
+  addEventListener("storage", (e) => {
+    if (e.key !== TOKEN_KEY && e.key !== USER_KEY && e.key !== null) return;
+    const nextToken = store.get(TOKEN_KEY);
+    let nextUser = null;
+    try { nextUser = nextToken ? JSON.parse(store.get(USER_KEY)) : null; } catch {}
+    if (nextToken === token && nextUser?.id === user?.id && nextUser?.name === user?.name) return;
+    if (dialog.open && !nextUser) dialog.close();
+    apply(nextUser, nextToken);
+  });
 
   async function api(method, path, body) {
     let res;
