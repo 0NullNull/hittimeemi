@@ -90,6 +90,21 @@ main { max-width: 1180px; margin: 0 auto; padding: 0 24px 48px; }
   background: rgba(245, 184, 46, 0.1); border: 1px solid rgba(245, 184, 46, 0.35); color: #f8d27a;
 }
 
+/* alet (ylläpito julkaisee) */
+.sales {
+  display: grid; gap: 6px; margin: 0 0 14px; padding: 12px 16px; border-radius: var(--radius);
+  background: linear-gradient(90deg, rgba(239, 68, 68, 0.2), rgba(245, 184, 46, 0.14)); border: 1px solid rgba(245, 184, 46, 0.45);
+}
+.sale { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.sale-pct { padding: 2px 10px; border-radius: 999px; background: var(--red); color: #fff; font: 800 1rem var(--display); }
+.sale-left { margin-left: auto; color: var(--gold); font-size: 0.9rem; font-variant-numeric: tabular-nums; }
+.sales small { color: var(--muted); }
+.sale-tag {
+  margin-left: 6px; padding: 1px 7px; border-radius: 999px; background: var(--red); color: #fff;
+  font-size: 0.72rem; font-weight: 700; vertical-align: 1px;
+}
+.bet-price { display: block; margin-top: 5px; color: var(--gold); font-size: 0.82rem; font-weight: 600; }
+
 .tabs { display: flex; gap: 6px; margin: 0 0 16px; }
 .tabs a {
   padding: 9px 18px; border-radius: 10px; border: 1px solid transparent;
@@ -225,17 +240,64 @@ main { max-width: 1180px; margin: 0 auto; padding: 0 24px 48px; }
 
 /* ---------- kolikkopeli ---------- */
 .slot-machine {
+  --cell: 100px; /* sama kuin slots.js:n CELL */
+  position: relative; overflow: hidden;
   padding: 26px; border-radius: 16px; text-align: center;
-  background: linear-gradient(180deg, #2a1f05, #171003); border: 2px solid rgba(245, 184, 46, 0.5);
+  background: radial-gradient(120% 90% at 50% 0%, #3a2b08, #171003 70%); border: 2px solid rgba(245, 184, 46, 0.5);
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
-.reels { display: flex; justify-content: center; gap: 14px; }
+.slot-machine.win { border-color: var(--gold); box-shadow: 0 0 44px rgba(245, 184, 46, 0.22); }
+.reels { position: relative; display: flex; justify-content: center; gap: 14px; width: fit-content; margin: 0 auto; padding: 0 28px; }
+/* voittolinja: nuolet kiekkojen molemmin puolin */
+.reels::before, .reels::after {
+  content: ""; position: absolute; top: 50%; margin-top: -12px; border: 12px solid transparent;
+}
+.reels::before { left: 0; border-left: 16px solid var(--gold); border-right-width: 0; }
+.reels::after { right: 0; border-right: 16px solid var(--gold); border-left-width: 0; }
 .reel {
-  width: 130px; height: 140px; display: grid; place-items: center; border-radius: 14px;
-  background: #fffaf0; font-size: 4.4rem; box-shadow: inset 0 -10px 20px rgba(0, 0, 0, 0.18);
+  position: relative; width: 132px; height: calc(var(--cell) * 2.3); overflow: hidden; border-radius: 14px;
+  background: #fffaf0; box-shadow: 0 0 0 3px #3b2a08, 0 8px 20px rgba(0, 0, 0, 0.45);
 }
-.reel.spin { filter: blur(1.5px); }
-.reel.hit { box-shadow: 0 0 0 4px var(--gold), inset 0 -10px 20px rgba(0, 0, 0, 0.18); }
+/* kaareva kiekko: tummuu ylä- ja alareunaa kohti */
+.reel::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(180deg, rgba(23, 16, 3, 0.8), rgba(23, 16, 3, 0) 34%, rgba(23, 16, 3, 0) 66%, rgba(23, 16, 3, 0.8));
+}
+.strip { position: absolute; inset: 0; }
+.cell {
+  position: absolute; left: 0; right: 0; top: 50%; height: var(--cell); margin-top: calc(var(--cell) / -2);
+  display: grid; place-items: center; font-size: 4.1rem; line-height: 1; will-change: transform;
+}
+.hit-frame {
+  position: absolute; z-index: 1; left: 6px; right: 6px; top: 50%; height: calc(var(--cell) - 6px);
+  transform: translateY(-50%); border: 3px solid var(--gold); border-radius: 12px; opacity: 0; pointer-events: none;
+}
+.reel.hit .hit-frame { opacity: 1; animation: hit-pulse 0.7s ease-in-out infinite alternate; }
+@keyframes hit-pulse {
+  from { box-shadow: 0 0 6px rgba(245, 184, 46, 0.3), inset 0 0 10px rgba(245, 184, 46, 0.3); }
+  to { box-shadow: 0 0 24px rgba(245, 184, 46, 0.85), inset 0 0 18px rgba(245, 184, 46, 0.55); }
+}
+.reel.tense { animation: tense 0.32s ease-in-out infinite alternate; }
+@keyframes tense {
+  from { box-shadow: 0 0 0 3px #3b2a08, 0 8px 20px rgba(0, 0, 0, 0.45); }
+  to { box-shadow: 0 0 0 3px var(--gold), 0 0 30px rgba(245, 184, 46, 0.8); }
+}
+.reel.landed { animation: landed 0.18s ease-out; }
+@keyframes landed { 40% { transform: translateY(3px); } }
 .slot-result { margin-top: 16px; min-height: 1.6em; font: 800 1.4rem var(--display); color: var(--gold); }
+.slot-result.win { animation: pop 0.35s cubic-bezier(0.3, 1.6, 0.5, 1); }
+.slot-machine.big .slot-result { font-size: 1.9rem; }
+@keyframes pop { from { transform: scale(0.6); opacity: 0; } }
+.coin {
+  position: absolute; left: 50%; top: 42%; z-index: 2; margin-left: -0.5em; font-size: 1.9rem; pointer-events: none;
+  animation: coin 1.4s cubic-bezier(0.2, 0.6, 0.4, 1) both;
+}
+@keyframes coin {
+  0% { transform: translate(0, 0) scale(0.4) rotate(0); opacity: 0; }
+  10% { opacity: 1; }
+  45% { transform: translate(calc(var(--dx) * 0.6), var(--dy)) scale(1) rotate(calc(var(--r) * 0.5)); }
+  100% { transform: translate(var(--dx), calc(var(--dy) + 420px)) scale(1) rotate(var(--r)); opacity: 0.9; }
+}
 .paytable { border-collapse: collapse; }
 .paytable td { padding: 3px 14px 3px 0; font-variant-numeric: tabular-nums; }
 .paytable td:first-child { font-size: 1.3rem; letter-spacing: 0.1em; }

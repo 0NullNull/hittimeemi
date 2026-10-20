@@ -47,10 +47,12 @@
     return el;
   }
 
+  // paid = maksettu summa (alen aikana pienempi kuin panos, josta voitto lasketaan)
+  const paid = (h) => h.paid ?? h.bet;
   const RESULTS = {
-    blackjack: (h) => `Blackjack! +${api.money(h.payout - h.bet)}`,
-    win: (h) => `Voitit! +${api.money(h.payout - h.bet)}`,
-    push: () => "Tasapeli: panos palautettiin.",
+    blackjack: (h) => `Blackjack! +${api.money(h.payout - paid(h))}`,
+    win: (h) => `Voitit! +${api.money(h.payout - paid(h))}`,
+    push: (h) => `Tasapeli: ${api.money(paid(h))} palautettiin.`,
     lose: () => "Jakaja voitti.",
     bust: () => "Yli 21. Hävisit.",
   };
@@ -63,8 +65,8 @@
     ui.player.replaceChildren(...(m.player ?? []).map(card));
     ui.dealerTotal.textContent = idle ? "" : `(${m.dealerTotal})`;
     ui.playerTotal.textContent = idle ? "" : `(${m.playerTotal})`;
-    ui.result.className = "bj-result" + (m.result ? (m.payout > m.bet ? " win" : m.payout === m.bet ? "" : " lose") : "");
-    ui.result.textContent = m.result ? RESULTS[m.result](m) : playing ? `Panos ${api.money(m.bet)}. Otatko kortin vai jäätkö?` : "Aseta panos ja jaa kortit.";
+    ui.result.className = "bj-result" + (m.result ? (m.payout > paid(m) ? " win" : m.payout === paid(m) ? "" : " lose") : "");
+    ui.result.textContent = m.result ? RESULTS[m.result](m) : playing ? `Panos ${api.money(m.bet)}${paid(m) < m.bet ? ` (maksoit ${api.money(paid(m))})` : ""}. Otatko kortin vai jäätkö?` : "Aseta panos ja jaa kortit.";
     ui.deal.hidden = playing;
     ui.deal.textContent = m.phase === "done" ? "Jaa uudelleen" : "Jaa kortit";
     for (const b of [ui.hit, ui.stand]) b.hidden = !playing;

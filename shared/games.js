@@ -26,7 +26,7 @@ window.GAMES = [
   {
     id: "kasino",
     title: "Kasino",
-    tagline: "Crash, ruletti, blackjack ja kolikkopeli leikkirahalla. Ei oikeaa rahaa.",
+    tagline: "Crash, ruletti, blackjack ja kolikkopeli. Ei oikeaa rahaa.",
     url: "/kasino/",
     image: "/shared/thumbs/kasino.png",
   },

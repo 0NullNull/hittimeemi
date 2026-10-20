@@ -27,9 +27,16 @@
   }
 
   const games = window.KasinoGames || {};
-  let wallet = null;     // { balance, guest, bonusAvailable }
+  let wallet = null;     // { balance, guest, bonusAvailable, daily }
   let shown = null;      // näytetty saldo
   let holdUntil = 0;     // pelin animaatio pyysi odottamaan saldon näyttämistä (ettei tulos paljastu)
+  let sales = [];        // käynnissä olevat alet: { id, game, percent, title, endsAt (tämän koneen kello) }
+  const priceUpdaters = [];
+
+  // Alennusprosentti pelille; sama sääntö kuin palvelimella (suurin voimassa oleva)
+  const discount = (game) =>
+    sales.reduce((best, s) => (s.endsAt > Date.now() && (s.game === "all" || s.game === game) ? Math.max(best, s.percent) : best), 0);
+  const price = (amount, off) => (off ? Math.ceil((amount * (100 - off)) / 100) : amount);
 
   // ---------- panoksen valinta (yhteinen kaikille peleille) ----------
 
@@ -47,6 +54,7 @@
       b.onclick = () => {
         input.value = Math.max(10, Math.floor(fn(Number(input.value) || 0)));
         save();
+        update();
       };
       return b;
     };
@@ -56,7 +64,17 @@
     const label = el("label", "", "Panos (€)");
     input.id = "bet-" + key;
     label.htmlFor = input.id;
-    root.append(label, row);
+    // alen aikana: paljonko panoksesta oikeasti maksetaan
+    const priceLine = el("small", "bet-price");
+    const update = () => {
+      const off = discount(key);
+      priceLine.hidden = !off;
+      if (off) priceLine.textContent = `Ale -${off} %: maksat ${money(price(Math.floor(Number(input.value) || 0), off))}`;
+    };
+    input.addEventListener("input", update);
+    priceUpdaters.push(update);
+    update();
+    root.append(label, row, priceLine);
     return { root, get value() { return Math.floor(Number(input.value) || 0); } };
   }
 
@@ -104,9 +122,11 @@
     const bonus = $("bonus");
     bonus.hidden = false;
     bonus.classList.toggle("muted", !wallet.guest && !wallet.bonusAvailable);
+    const daily = money(wallet.daily ?? 1000); // vanha palvelin ei kertonut summaa (se oli 1 000 €)
     bonus.textContent = wallet.guest
-      ? "Luo tili: 1 000 € päivässä"
-      : wallet.bonusAvailable ? "Hae päivän rahat (+1 000 €)" : "Uudet rahat huomenna";
+      ? `Luo tili: ${daily} päivässä`
+      : wallet.bonusAvailable ? `Hae päivän rahat (+${daily})` : "Uudet rahat huomenna";
+    $("guest-daily").textContent = daily;
     bonus.disabled = !wallet.guest && !wallet.bonusAvailable;
     $("guest-banner").hidden = !wallet.guest;
   }
@@ -172,6 +192,45 @@
     );
   }
 
+  // ---------- alet ----------
+
+  const GAME_NAMES = { all: "Kaikki pelit", crash: "Crash", roulette: "Ruletti", blackjack: "Blackjack", slots: "Kolikkopeli" };
+
+  function timeLeft(ms) {
+    const s = Math.max(0, Math.floor(ms / 1000));
+    const d = Math.floor(s / 86400), h = Math.floor((s % 86400) / 3600), m = Math.floor((s % 3600) / 60);
+    if (d) return `${d} vrk ${h} h`;
+    if (h) return `${h} h ${m} min`;
+    if (m) return `${m} min ${s % 60} s`;
+    return `${s} s`;
+  }
+
+  function renderSales() {
+    const now = Date.now();
+    sales = sales.filter((s) => s.endsAt > now);
+    const box = $("sales");
+    box.hidden = !sales.length;
+    box.replaceChildren(
+      ...sales.map((s) => {
+        const row = el("div", "sale");
+        row.append(el("span", "sale-pct", `-${s.percent} %`), el("strong", "", GAME_NAMES[s.game]));
+        if (s.title) row.append(el("span", "", s.title));
+        row.append(el("span", "sale-left", "päättyy " + timeLeft(s.endsAt - now)));
+        return row;
+      }),
+      ...(sales.length ? [el("small", "", "Panokset maksavat vähemmän, mutta voitot lasketaan koko panoksesta.")] : []),
+    );
+    document.querySelectorAll(".tabs a").forEach((a) => {
+      const off = discount(a.dataset.tab);
+      let tag = a.querySelector(".sale-tag");
+      if (!tag) a.append((tag = el("span", "sale-tag")));
+      tag.hidden = !off;
+      tag.textContent = `-${off} %`;
+    });
+    for (const update of priceUpdaters) update();
+  }
+  setInterval(() => sales.length && renderSales(), 1000);
+
   // ---------- välilehdet ----------
 
   const TABS = { crash: "crash", ruletti: "roulette", blackjack: "blackjack", kolikkopeli: "slots" };
@@ -214,6 +273,10 @@
         loadRichSoon();
       } else if (m.type === "notice") toast(m.text);
       else if (m.type === "feed") renderFeed(m.items);
+      else if (m.type === "sales") {
+        sales = m.sales.map((s) => ({ ...s, endsAt: Date.now() + s.msLeft }));
+        renderSales();
+      }
       else if (ROUTES[m.type]) games[ROUTES[m.type]]?.message(m);
     },
     error(e) {
