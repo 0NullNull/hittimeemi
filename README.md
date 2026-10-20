@@ -6,6 +6,7 @@ A collection of small browser games, in the style of neal.fun. Each game lives i
 |---|---|
 | Hittimeemi: guess the Finnish meme from a 0.5 s clip | [`hittimeemi/`](hittimeemi/) |
 | Reaktio: multiplayer reaction duel (test game for the game server) | [`reaktio/`](reaktio/) |
+| Kasino: free play-money casino (crash, roulette, blackjack, slots) | [`kasino/`](kasino/) |
 
 ## Running locally
 
@@ -58,6 +59,15 @@ Field details:
 - Clip lengths: `STEPS` at the top of `hittimeemi/game.js`.
 - **Daily meme:** the server picks one once per day (Finnish time) and saves it, so it's the same for everyone and editing the list doesn't change it. It picks memes that haven't been the daily meme yet, then the ones that waited longest. Only when the server is unreachable does the game fall back to working it out from the date.
 - Free play goes through every meme once before repeating, and the counter shows how many are left.
+
+## Kasino
+
+A free casino with play money shown as euros: Crash, Ruletti, Blackjack and Kolikkopeli.
+- **No real money.** Euros can't be bought, cashed out or exchanged for anything, and the page says so in the header, the guest banner and the footer. Keep it that way: no purchases, no prizes.
+- **Accounts** start with 1 000 € and get 1 000 € free every day (Finnish time). Their balance counts on the "Rikkaimmat" leaderboard.
+- **Guests** get a temporary 1 000 € that isn't saved. If they sign up, a bigger guest balance carries over to the new account.
+- **The server does every draw and payout** (`server/games/kasino/`). Crash and roulette are shared tables for everyone at the casino; blackjack and slots are each player's own.
+- **Payout rates:** crash 99 %, roulette 97.3 % (single zero), slots 96.8 %, blackjack about 99 %.
 
 ## Hosting
 
